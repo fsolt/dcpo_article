@@ -1,0 +1,16 @@
+.Rproj.user
+.Rhistory
+.RData
+.DS_Store
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.tex
+*.nav
+*.snm
+*.toc
+dev/*
+framed.sty
+data/church*.rda
