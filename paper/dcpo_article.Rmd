@@ -129,17 +129,30 @@ Cumulative logit
 
 ### Country-Varying Question Difficulty
 
-Survey questions may be interpreted differently in different countries as a result of translation issues or other ideosyncracies---recall Tarrow's [-@Tarrow1971, 344] famous observation that the French understood survey questions regarding their "interest in politics" as inquiring about the strength of their partisan identification.
-
+Responses to survey questions may vary across different countries not only as a result of differences in attitudes and preferences but also due to translation issues [see, e.g., @Davidov2010], cultural differences in response styles [see, e.g., @VanHerk2004], or other idiosyncrasies---recall Tarrow's [-@Tarrow1971, 344] famous observation that the French understood survey questions regarding their "interest in politics" as inquiring about the strength of their partisan affiliations.
+Rather than simply allowing such problems of equivalence to contribute to the error of the model, they can be addressed explicitly by modeling the country-specific item bias  [@Stegmueller2011], $\delta_{kq}$.
+Claassen's [-@Claassen2019, 5-6] work employs this technique, and because estimating $\delta_{kq}$ requires data from repeated administrations of question $q$ in country $k$, it discards survey data that does not meet this requirement.
+DCPO also incorporates $\delta_{kq}$ to capture country-specific item bias, but it takes a slightly different approach that aims to maximize the incorporation of available survey data: when responses to question $q$ are observed in country $k$ in only a single year, $\delta_{kq}$ is set to zero by assumption.
+This means that incorporating these 'one-shot' surveys will come at the cost of increasing the error of the model by any country-item bias that is present.
 
 ### Bounded
+
+Previous efforts to measure cross-national aggregate public opinion as a latent variable have generated estimates on an unbounded scale with mean zero and unit variance [see @Claassen2019, 14; @Caughey2019, 8].
+However, like many other concepts in political science [see @Linzer2015, 229], many aspects of public opinion are conceptually bounded, that is, it make sense to think of them as lying along a scale from fully absent to fully present in the relevant public.
+Take attitudes toward immigration as an example.
+One hypothetical country's citizens are absolutely opposed to any immigration, while another's are completely welcoming to migrants.
+Actual countries' levels of public opinion toward immigration are better understood not as unbounded but as falling somewhere between the bounds described by these two hypothetical countries.
+It is not surprising, then, that earlier works aggregating public opinion within a single country presented results on bounded scales [see @Stimson1991; @McGann2014].
+Even if the issue in question is less easily viewed as bounded, bounding is still a good idea because it reduces the uncertainty for the estimates for countries at the extremes, that is, those countries that should in fact be easier to estimate.
+As Linzer and Staton [-@Linzer2015, 229] write, "bounding the latent variable may do little harm to the scale and produce more sensible estimates of uncertainty."
+DCPO therefore bounds estimates of aggregate public opinion to range between zero and one.
 
 ### Country-Year Population Variance
 
 The probability of an individual $i$ in country $k$ at time $t$ giving a response at least as positive as response $r$ to question $q$ is:
 
 \begin{equation}
-Pr(Y \geq r) = logit^{-1}(\frac{\bar{\theta}_{kt} - (\beta_{qr} + \delta_{kq})}{\sqrt{\alpha_{q}^2 + \sigma_{kt}^2}})
+Pr(Y \geq r) = logit^{-1}(\frac{\bar{\theta}_{kt}' - (\beta_{qr} + \delta_{kq})}{\sqrt{\alpha_{q}^2 + \sigma_{kt}^2}})
 \end{equation}
 
 %McGann2014, 125: ``the IRT model has the added advantages of being better justified in terms of individual-level behavior and the additional parameters (the polarization of the population in terms of policy mood) are substantively interesting.''
@@ -152,6 +165,9 @@ Random walk priors for $\bar{\theta}_{kt}$ and $\sigma_{kt}^2$
 
 
 ### Identification, Priors, and Estimation
+
+For each question $q$, $\delta_{kq}$ are constrained to have mean equal to zero.
+
 
 
 ## Conclusions
@@ -184,3 +200,4 @@ ivt_dgirt <- DCPOtools::internal_validation_tests(demsup_data_dgirt, out1, "dgir
 bind_rows(ivt_claassen, ivt_dgirt, ivt_dcpo) %>% 
     select(-loo_ic)
 ```
+
