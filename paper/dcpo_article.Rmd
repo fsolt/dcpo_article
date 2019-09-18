@@ -83,11 +83,7 @@ question of feedback: positive or negative? ("policies create constituencies" vs
 solution:
     informed by recent efforts to improve data quality of cross-national time-series data on other latent concepts, such as democracy (Treier and Jackman 2008; Pemstein, Meserve, and Melton 2010, [Arel-Bundock and Mebane 2011]) and judicial independence (Linzer and Staton [2013]), I offer a Bayesian measurement model for comparative public opinion
 
-priors for scarce data: Bailey (2001)
-Bayesian for missing data: Jackman (2000)
 random walk for flexibility: Linzer and Staton [2013]
-heteroskedastic ideal points: Lauderdale (2010) -- actually not heteroskedastic (no gammas)
-    no risk of outside raters doing a worse job with some countries because no outsiders: public opinion is what it is
 
 ```{r comparison_table}
 comparison_data <- tibble::tribble(
@@ -141,15 +137,23 @@ where $\bar{\theta'}_{kt}$ and $\sigma_{kt}$ are the mean and standard deviation
 
 ### Ordinal
 
-Cumulative logit 
+The next step in building the DCPO model
+
+\begin{equation}
+log[\frac{Pr(Y_{i} \geq r)}{1 - Pr(Y_{i} < r)}] = \frac{\bar{\theta'}_{kt} - \beta_{q}}{\sqrt{\alpha_{q}^2 + (1.7*\sigma_{kt})^2}}
+\end{equation}
 
 ### Country-Varying Question Difficulty
 
 Responses to survey questions may vary across different countries not only as a result of differences in attitudes and preferences but also due to translation issues [see, e.g., @Davidov2010], cultural differences in response styles [see, e.g., @VanHerk2004], or other idiosyncrasies---recall Tarrow's [-@Tarrow1971, 344] famous observation that the French understood survey questions regarding their "interest in politics" as inquiring about the strength of their partisan affiliations.
-Rather than simply allowing such problems of equivalence to contribute to the error of the model, they can be addressed explicitly by modeling the country-specific item bias  [@Stegmueller2011], $\delta_{kq}$.
+Rather than simply allowing such problems of equivalence to contribute to the error of the model, they can be addressed explicitly by modeling the country-specific item bias  [@Stegmueller2011], denoted here as $\delta_{kq}$.
 Claassen's [-@Claassen2019, 5-6] work employs this technique, and because estimating $\delta_{kq}$ requires data from repeated administrations of question $q$ in country $k$, it discards survey data that does not meet this requirement.
 DCPO also incorporates $\delta_{kq}$ to capture country-specific item bias, but it takes a slightly different approach that aims to maximize the incorporation of available survey data: when responses to question $q$ are observed in country $k$ in only a single year, $\delta_{kq}$ is set to zero by assumption.
 This means that incorporating these 'one-shot' surveys will come at the cost of increasing the error of the model by any country-item bias that is present.
+
+\begin{equation}
+log[\frac{Pr(Y_{i} \geq r)}{1 - Pr(Y_{i} < r)}] = \frac{\bar{\theta'}_{kt} - (\beta_{qr} + \delta_{kq})}{\sqrt{\alpha_{q}^2 + (1.7*\sigma_{kt})^2}}
+\end{equation}
 
 ### Bounded
 
