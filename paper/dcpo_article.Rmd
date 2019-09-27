@@ -117,7 +117,7 @@ comparison_ht
 In the two-parameter logistic IRT model, the log odds of the probability that individual $i$ responds affirmatively to a dichotomous question $q$ is a function of three parameters:
 
 \begin{equation}
-log[\frac{Pr(Y_{i} = 1)}{1-Pr(Y_{i} = 1)}] = \frac{\theta_{i} - \beta_{q}}{\alpha_{q}}
+log[\frac{Pr(Y_{i} = 1)}{1-Pr(Y_{i} = 1)}] = \frac{\theta'_{i} - \beta_{q}}{\alpha_{q}}
 \end{equation}
 
 First, the individual's score on the unbounded latent trait, $\theta'_{i}$; individuals with higher scores are more likely to give an affirmative response.
@@ -133,27 +133,49 @@ If scores on the unbounded latent trait are modeled as normally distributed with
 log[\frac{Pr(Y_{i} = 1)}{1-Pr(Y_{i} = 1)}] = \frac{\bar{\theta'}_{kt} - \beta_{q}}{\sqrt{\alpha_{q}^2 + (1.7*\sigma_{kt})^2}}
 \end{equation}
 
-where $\bar{\theta'}_{kt}$ and $\sigma_{kt}$ are the mean and standard deviation of the unbounded latent trait in the population of country $k$ at time $t$ [see @Mislevy1983, 280; see also, using the probit IRT model, @McGann2014, 120; @Caughey2015, 200].
+where $\bar{\theta'}_{kt}$ and $\sigma_{kt}$ are the mean and standard deviation of the unbounded latent trait in the population of country $k$ at time $t$ [see @Mislevy1983, 280; see also, using the probit IRT model, @McGann2014, 120].
 
-### Ordinal
+Further, many survey questions are not simply dichotomous, but instead measure respondents' attitudes on ordinal scales.
 
-The next step in building the DCPO model
+To take advantage of this additional information, the 
+cumulative logit
 
 \begin{equation}
-log[\frac{Pr(Y_{i} \geq r)}{1 - Pr(Y_{i} < r)}] = \frac{\bar{\theta'}_{kt} - \beta_{q}}{\sqrt{\alpha_{q}^2 + (1.7*\sigma_{kt})^2}}
+log[\frac{Pr(Y_{i} \geq r)}{1 - Pr(Y_{i} < r)}] = \frac{\bar{\theta'}_{kt} - \beta_{qr}}{\sqrt{\alpha_{q}^2 + (1.7*\sigma_{kt})^2}}
 \end{equation}
+
+$$\beta_{qr}$$ explained 
 
 ### Country-Varying Question Difficulty
 
-Responses to survey questions may vary across different countries not only as a result of differences in attitudes and preferences but also due to translation issues [see, e.g., @Davidov2010], cultural differences in response styles [see, e.g., @VanHerk2004], or other idiosyncrasies---recall Tarrow's [-@Tarrow1971, 344] famous observation that the French understood survey questions regarding their "interest in politics" as inquiring about the strength of their partisan affiliations.
+Responses to survey questions may vary across different countries not only as a result of differences in attitudes and preferences but also due to translation issues [see, e.g., @Davidov2010], cultural differences in response styles [see, e.g., @VanHerk2004], or other idiosyncrasies---recall Tarrow's [-@Tarrow1971, 344] famous observation that the French understood survey questions regarding their 'interest in politics' as inquiring about the strength of their partisan affiliations.
 Rather than simply allowing such problems of equivalence to contribute to the error of the model, they can be addressed explicitly by modeling the country-specific item bias  [@Stegmueller2011], denoted here as $\delta_{kq}$.
 Claassen's [-@Claassen2019, 5-6] work employs this technique, and because estimating $\delta_{kq}$ requires data from repeated administrations of question $q$ in country $k$, it discards survey data that does not meet this requirement.
 DCPO also incorporates $\delta_{kq}$ to capture country-specific item bias, but it takes a slightly different approach that aims to maximize the incorporation of available survey data: when responses to question $q$ are observed in country $k$ in only a single year, $\delta_{kq}$ is set to zero by assumption.
 This means that incorporating these 'one-shot' surveys will come at the cost of increasing the error of the model by any country-item bias that is present.
+In the context of the population-level cumulative-logit IRT model, including country-specific item bias can be readily understood as a country-varying shift in the difficulty of each question:
 
 \begin{equation}
 log[\frac{Pr(Y_{i} \geq r)}{1 - Pr(Y_{i} < r)}] = \frac{\bar{\theta'}_{kt} - (\beta_{qr} + \delta_{kq})}{\sqrt{\alpha_{q}^2 + (1.7*\sigma_{kt})^2}}
 \end{equation}
+
+To ensure that [...], the sum of $\delta_{kq}$ across all countries $k$ is fixed to zero for each question $q$:
+
+\begin{equation}
+\sum_{k = 1}^K \delta_{kq} = 0
+\end{equation}
+
+
+### Country-Year Population Variance
+
+The probability of an individual $i$ in country $k$ at time $t$ giving a response at least as positive as response $r$ to question $q$ is:
+
+\begin{equation}
+Pr(Y \geq r) = logit^{-1}(\frac{\bar{\theta}_{kt}' - (\beta_{qr} + \delta_{kq})}{\sqrt{\alpha_{q}^2 + \sigma_{kt}^2}})
+\end{equation}
+
+%McGann2014, 125: ``the IRT model has the added advantages of being better justified in terms of individual-level behavior and the additional parameters (the polarization of the population in terms of policy mood) are substantively interesting.''
+
 
 ### Bounded
 
@@ -168,20 +190,11 @@ As Linzer and Staton [-@Linzer2015, 229] write, "bounding the latent variable ma
 DCPO therefore uses the standard cumulative normal distribution function to transform the unbounded estimates, $\bar{\theta'}_{kt}$, to the unit interval:
 
 \begin{equation}
-\bar{\theta}_{kt} = \Phi({\bar{\theta'}_{kt}})
+\bar{\theta}_{kt} = \Phi({\bar{\theta'}_{kt}} - .5)
 \end{equation}
 
 The resulting $\bar{\theta}_{kt}$ is the DCPO estimate of aggregate public opinion for country $k$ at time $t$.
 
-### Country-Year Population Variance
-
-The probability of an individual $i$ in country $k$ at time $t$ giving a response at least as positive as response $r$ to question $q$ is:
-
-\begin{equation}
-Pr(Y \geq r) = logit^{-1}(\frac{\bar{\theta}_{kt}' - (\beta_{qr} + \delta_{kq})}{\sqrt{\alpha_{q}^2 + \sigma_{kt}^2}})
-\end{equation}
-
-%McGann2014, 125: ``the IRT model has the added advantages of being better justified in terms of individual-level behavior and the additional parameters (the polarization of the population in terms of policy mood) are substantively interesting.''
 
 
 
@@ -214,7 +227,7 @@ Further, this allows a broadly comparative approach that is new to work on the r
 
 
 ```{r validation}
-load("~/Documents/Projects/dcpo_article/data/church_21_1k_09-07-22-50.rda")
+load("~/Documents/Projects/dcpo_article/data/church_21_2k_09-27-01-14.rda")
 ivt_dcpo <- DCPOtools::internal_validation_tests(demsup_data, out1)
 
 load("~/Documents/Projects/dcpo_article/data/claassen_m5_1k_07-15-10-25.rda")
