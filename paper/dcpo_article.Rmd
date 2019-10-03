@@ -78,7 +78,7 @@ question of feedback: positive or negative? ("policies create constituencies" vs
 
 
 
-## A Method for Estimating Dynamic Comparative Public Opinion
+## Estimating Dynamic Comparative Public Opinion
 (Treier and Jackman 2008; Pemstein, Meserve, and Melton 2010, [Arel-Bundock and Mebane 2011]) 
 
 In the two-parameter logistic IRT model, the log odds of the probability that individual $i$ responds affirmatively to a dichotomous question $q$ is a function of three parameters:
@@ -114,10 +114,10 @@ where $\beta_{qr}$ is the difficulty of response $r$ of question $q$, constraine
 
 Finally, the model can also be usefully made to take into account differences in item response bias across countries.
 Responses to survey questions may vary across different countries not only as a result of differences in attitudes and preferences but also due to translation issues [see, e.g., @Davidov2010], cultural differences in acquiescence and extreme response styles [see, e.g., @VanHerk2004], or other idiosyncrasies---recall Tarrow's [-@Tarrow1971, 344] famous observation that the French understood survey questions regarding their 'interest in politics' as inquiring about the strength of their partisan affiliations.
-Rather than simply allowing such problems of equivalence to contribute to the error of the model, they can be addressed explicitly by modeling the country-specific item bias  [@Stegmueller2011], denoted here as $\delta_{kq}$.
+Rather than simply allowing such problems of equivalence to contribute to the error of the model, they can be addressed explicitly by modeling the country-specific item bias  [@Stegmueller2011], denoted here as $\delta_{kq}$.^[
 Claassen's [-@Claassen2019, 5-6] work employs this technique, and because estimating $\delta_{kq}$ requires data from repeated administrations of question $q$ in country $k$, it discards survey data that does not meet this requirement.
 DCPO also incorporates $\delta_{kq}$ to capture country-specific item bias, but it takes a slightly different approach that aims to maximize the incorporation of available survey data: when responses to question $q$ are observed in country $k$ in only a single year, $\delta_{kq}$ is set to zero by assumption.
-This means that incorporating these 'one-shot' surveys will come at the cost of increasing the error of the model by any country-item bias that is present.
+This means that incorporating these 'one-shot' surveys will come at the cost of increasing the error of the model by any country-item bias that is present.]
 In the context of the population-level graded response model presented in Equation \ref{eq:pop_grm}, including country-specific item bias can be readily understood as a country-varying shift in the difficulty of each question:
 
 \begin{equation}
