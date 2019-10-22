@@ -90,7 +90,7 @@ Pr(Y_{iq} = 1) = \textrm{logit}^{-1}(\frac{\theta'_{i} - \beta_{q}}{\alpha_{q}})
 First, the individual's score on the unbounded latent trait, $\theta'_{i}$; individuals with higher scores are more likely to give an affirmative response.
 Second, the *difficulty* of the question, $\beta_{q}$.
 As the question's difficulty increases, individuals are less likely to respond affirmatively, and vice versa.
-When $\theta'_{i}$ and $\beta_{q}$ are equal, the probability of an affirmative response is .5. 
+When $\theta'_{i}$ and $\beta_{q}$ are equal, the probability of an affirmative response is 50%. 
 Third, the *dispersion* of the question, $\alpha_{q}$, which is proportional to the measurement error of the question.
 As the question's dispersion increases, individuals with lower scores on the latent trait become more likely to respond affirmatively and those with higher scores on the latent trait are more likely to respond negatively.
 
@@ -124,11 +124,11 @@ In the context of the population-level graded response model presented in Equati
 \eta_{ktqr} = \textrm{logit}^{-1}(\frac{\bar{\theta'}_{kt} - (\beta_{qr} + \delta_{kq})}{\sqrt{\alpha_{q}^2 + (1.7*\sigma_{kt})^2}}) \label{eq:dcpo}
 \end{equation}
 
-Before continuing, we pause to review briefly the relationships of the parameters in this equation.
-The numerator of Equation \ref{eq:dcpo} implies that $\eta_{ktqr}$, the expected probability of a response at least as positive as $r$, increases with increasing mean values of the latent trait in the population, $\bar{\theta'}_{kt}$, and decreases with increasingly difficult questions and higher response values, $\beta_{qr}$, and particularly so where item-response bias, $\delta_{kq}$, is positive.
-Its denominator implies that $\eta_{ktqr}$ is drawn closer to 50% as the geometric mean of the question's dispersion, $\alpha_{q}$, and the standard deviation in opinion in the population, $\sigma_{kt}$, increases: individuals sampled even from a population with a negative mean value on the latent trait and facing a difficult question will still be more likely to supply more positive responses---and those from a population with a positive mean score on the latent trait and answering an easy question will be more likely to supply more negative responses---if the question's dispersion is greater or attitudes are more polarized in the population.
+Before continuing, we pause to briefly review the relationships of the parameters in this equation.
+The numerator of Equation \ref{eq:dcpo} implies first that $\eta_{ktqr}$, the expected probability of a response at least as positive as $r$, increases as the mean value of the latent trait in the population, $\bar{\theta'}_{kt}$, increases and second that $\eta_{ktqr}$ decreases with more difficult questions and higher response categories, $\beta_{qr}$, and particularly so where the item-response bias, $\delta_{kq}$, is positive.
+The equation's denominator implies that $\eta_{ktqr}$ is drawn closer to 50% as the geometric mean of the question's dispersion, $\alpha_{q}$, and the standard deviation in opinion in the population, $\sigma_{kt}$, increases: individuals sampled even from a population with a negative mean value on the latent trait and answering a difficult question will still be more likely to supply more positive responses---and those from a population with a positive mean score on the latent trait and answering an easy question will be more likely to supply more negative responses---if the question's dispersion is greater or attitudes are more polarized in the population.
 
-Given this expected probability $\eta_{ktqr}$, the total number of survey responses at least as positive as $r$ to each question $q$ in country $k$ at time $t$, $y_{ktqr}$, out of the $n_{ktqr}$ respondents is then modeled using the beta-binomial distribution, which allows for an overall dispersion parameter, $\phi$, to account for additional sources of survey error [see @McGann2014, 120; @Claassen2019, 4-5].
+Given this expected probability $\eta_{ktqr}$, the total number of survey responses at least as positive as $r$ to each question $q$ in country $k$ at time $t$, $y_{ktqr}$, out of the total number of respondents surveyed, $n_{ktqr}$, is then modeled using the beta-binomial distribution, which allows for an overall dispersion parameter, $\phi$, to account for additional sources of survey error [see @McGann2014, 120; @Claassen2019, 4-5].
 
 \begin{equation}
 a_{ktqr} = \phi\eta_{ktqr} 
