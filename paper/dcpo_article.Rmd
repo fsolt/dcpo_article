@@ -76,12 +76,12 @@ question of feedback: positive or negative? ("policies create constituencies" vs
 
 
 
-
-
-## Estimating Dynamic Comparative Public Opinion
 (Treier and Jackman 2008; Pemstein, Meserve, and Melton 2010, [Arel-Bundock and Mebane 2011]) 
 
-In the two-parameter logistic IRT model, the probability that individual $i$ responds affirmatively to a dichotomous question $q$ is a function of three parameters:
+## Estimating Dynamic Comparative Public Opinion
+
+
+The logic underlying DCPO model starts at the individual level with the two-parameter logistic IRT model.  In the two-parameter logistic IRT model, the probability that individual $i$ responds affirmatively to a dichotomous question $q$ is a function of three parameters:
 
 \begin{equation}
 Pr(Y_{iq} = 1) = \textrm{logit}^{-1}(\frac{\theta'_{i} - \beta_{q}}{\alpha_{q}}) \label{eq:irt}
@@ -137,14 +137,21 @@ a_{ktqr} = \phi\eta_{ktqr}
 b_{ktqr} = \phi(1 - \eta_{ktqr})
 \end{equation}
 \begin{equation}
-y_{ktqr} \sim \text{BetaBinomial}(n_{ktqr}, a_{ktqr}, b_{ktqr})
+y_{ktqr} \sim \textrm{BetaBinomial}(n_{ktqr}, a_{ktqr}, b_{ktqr})
 \end{equation}
 
+To estimate the dynamics of comparative public opinion, the change over time, the prior distribution for each of the public opinion parameters in Equation \ref{eq:dcpo}, $\bar{\theta'}_{kt}$ and $\sigma_{kt}$, is given by a simple local-level dynamic linear transition model:
 
-### Adding Dynamics
+\begin{equation}
+\bar{\theta}_{kt} \sim \textrm{N}(\bar{\theta'}_{k,t-1}, \sigma_{\bar{\theta'}}^2)
+\end{equation}
+\begin{equation}
+\sigma_{kt} \sim \textrm{N}(\sigma_{k,t-1}, \sigma_{\sigma}^2)
+\end{equation}
 
-Random walk priors for $\bar{\theta}_{kt}$ and $\sigma_{kt}^2$
-
+By treating these parameters' values at time $t-1$ as their expected values at time $t$, these priors work to smooth estimates of both the mean and the standard deviation of the latent trait in the population of each country over time.
+If no survey data is available for a particular time, these models provide estimates based on the estimates for previous and subsequent periods.
+The variances \sigma_{\bar{\theta'}}^2 and \sigma_{\sigma}^2 are estimated from the data.
 
 ### Identification, Priors, and Estimation
 
