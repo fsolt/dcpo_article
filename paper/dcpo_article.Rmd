@@ -81,7 +81,7 @@ question of feedback: positive or negative? ("policies create constituencies" vs
 ## Estimating Dynamic Comparative Public Opinion
 
 
-The logic underlying DCPO model starts at the individual level with the two-parameter logistic IRT model.  In the two-parameter logistic IRT model, the probability that individual $i$ responds affirmatively to a dichotomous question $q$ is a function of three parameters:
+The logic underlying DCPO's approach to estimating dynamic comparative public opinion starts at the individual level with the two-parameter logistic IRT model.  In this model, the probability that individual $i$ responds affirmatively to a dichotomous question $q$ is a function of three parameters:
 
 \begin{equation}
 Pr(Y_{iq} = 1) = \textrm{logit}^{-1}(\frac{\theta'_{i} - \beta_{q}}{\alpha_{q}}) \label{eq:irt}
@@ -92,7 +92,7 @@ Second, the *difficulty* of the question, $\beta_{q}$.
 As the question's difficulty increases, individuals are less likely to respond affirmatively, and vice versa.
 When $\theta'_{i}$ and $\beta_{q}$ are equal, the probability of an affirmative response is 50%. 
 Third, the *dispersion* of the question, $\alpha_{q}$, which is proportional to the measurement error of the question.
-As the question's dispersion increases, individuals with lower scores on the latent trait become more likely to respond affirmatively and those with higher scores on the latent trait are more likely to respond negatively.
+As the question's dispersion increases, individuals with lower scores on the latent trait become more likely to respond affirmatively and those with higher scores on the latent trait are more likely to respond negatively; in other words, the slope of the curve describing the relationship between the latent trait and the probability of answering affirmatively flattens out.
 
 If scores on the unbounded latent trait are modeled as normally distributed within the population of country $k$ at time $t$, then the population-level two-parameter logistic IRT model is:
 
@@ -110,11 +110,13 @@ This yields a population-level graded response model:
 \eta_{ktqr} = \textrm{logit}^{-1}(\frac{\bar{\theta'}_{kt} - \beta_{qr}}{\sqrt{\alpha_{q}^2 + (1.7*\sigma_{kt})^2}}) \label{eq:pop_grm}
 \end{equation}
 
-where $\eta_{ktqr}$ is the expected probability that a random individual in country $k$ at time $t$ replies to question $q$ with a response at least as positive as response $r$ and $\beta_{qr}$ is the difficulty of response $r$ of question $q$, constrained to be increasing for increasing $r$. 
+The differences between Equation \ref{eq:pop_grm} and Equation \ref{eq:pop_irt} above are in the additional subscripts for $\eta$ and $\beta$.
+Here, $\eta_{ktqr}$ is the expected probability that a random individual in country $k$ at time $t$ replies to question $q$ with a response at least as positive as response $r$.
+The additional subscript to $\beta_{qr}$ indicates that this parameter represents the difficulty of response $r$ of question $q$, constrained to be increasing for increasing $r$. 
 
-Finally, the model can also be usefully made to take into account differences in item response bias across countries.
+A final addition to the model of the probability $\eta_{ktqr}$ takes into account differences in item response bias across countries.
 Responses to survey questions may vary across different countries not only as a result of differences in attitudes and preferences but also due to translation issues [see, e.g., @Davidov2010], cultural differences in acquiescence and extreme response styles [see, e.g., @VanHerk2004], or other idiosyncrasies---recall Tarrow's [-@Tarrow1971, 344] famous observation that the French understood survey questions regarding their 'interest in politics' as inquiring about the strength of their partisan affiliations.
-Rather than simply allowing such problems of equivalence to contribute to the error of the model, they can be addressed explicitly at least in part by modeling the country-specific item bias  [@Stegmueller2011], denoted here as $\delta_{kq}$.^[
+Rather than simply allowing such problems of equivalence to contribute to the error of the model, they can be addressed explicitly by modeling the country-specific item bias  [@Stegmueller2011], denoted here as $\delta_{kq}$.^[
 Claassen's [-@Claassen2019, 5-6] work employs this technique, and because estimating $\delta_{kq}$ requires data from repeated administrations of question $q$ in country $k$, it discards survey data that does not meet this requirement.
 DCPO also incorporates $\delta_{kq}$ to capture country-specific item bias, but it takes a slightly different approach that aims to maximize the incorporation of available survey data: when responses to question $q$ are observed in country $k$ in only a single year, $\delta_{kq}$ is set to zero by assumption.
 This means that incorporating these 'one-shot' surveys will come at the cost of increasing the error of the model by any country-item bias that is present.]
@@ -151,7 +153,7 @@ To estimate the dynamics of comparative public opinion, the change over time, th
 
 By treating these parameters' values at time $t-1$ as their expected values at time $t$, these priors work to smooth estimates of both the mean and the standard deviation of the latent trait in the population of each country over time.
 If no survey data is available for a particular time, these models provide estimates based on the estimates for previous and subsequent periods.
-The variances \sigma_{\bar{\theta'}}^2 and \sigma_{\sigma}^2 are estimated from the data.
+The variances $\sigma_{\bar{\theta'}}^2$ and $\sigma_{\sigma}^2$ are estimated from the data.
 
 ### Identification, Priors, and Estimation
 
