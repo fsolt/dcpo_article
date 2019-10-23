@@ -103,7 +103,7 @@ If scores on the unbounded latent trait are modeled as normally distributed with
 where $\eta_{ktq}$ is the expected probability that a random person in country $k$ at time $t$ answers question $q$ affirmatively and $\bar{\theta'}_{kt}$ and $\sigma_{kt}$ are the mean and standard deviation of the unbounded latent trait $\theta'$ in the population of country $k$ at time $t$ [see @Mislevy1983, 280; see also, using the probit IRT model, @McGann2014, 120].
 
 Further, many survey questions are not simply dichotomous, but instead measure respondents' attitudes on ordinal scales, assumed here to range from 1 to $R$.
-To take advantage of this additional information, the cumulative logit formulation is used, in which the log odds of the probability to be estimated is not those that individual $i$ provided a simple affirmative response, as in Equation \ref{eq:pop_irt} above, but instead the log odds of the probability that individual $i$ provided a response at least as positive as response $r$ for all $r$ greater than 1 and less than or equal to $R$.
+To take advantage of this additional information, the cumulative logit formulation is used, in which the probability to be estimated is not that individual $i$ provided a simple affirmative response, as in Equation \ref{eq:pop_irt} above, but instead the probability that individual $i$ provided a response at least as positive as response $r$ for all $r$ greater than 1 and less than or equal to $R$.
 This yields a population-level graded response model:
 
 \begin{equation}
