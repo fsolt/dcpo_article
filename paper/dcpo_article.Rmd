@@ -110,9 +110,9 @@ This yields a population-level graded response model:
 \eta_{ktqr} = \textrm{logit}^{-1}(\frac{\bar{\theta'}_{kt} - \beta_{qr}}{\sqrt{\alpha_{q}^2 + (1.7*\sigma_{kt})^2}}) \label{eq:pop_grm}
 \end{equation}
 
-The differences between Equation \ref{eq:pop_grm} and Equation \ref{eq:pop_irt} above are in the additional subscripts for $\eta$ and $\beta$.
-Here, $\eta_{ktqr}$ is the expected probability that a random individual in country $k$ at time $t$ replies to question $q$ with a response at least as positive as response $r$.
-The additional subscript to $\beta_{qr}$ indicates that this parameter represents the difficulty of response $r$ of question $q$, constrained to be increasing for increasing $r$. 
+The differences between Equation \ref{eq:pop_grm} for the population-level graded response model and Equation \ref{eq:pop_irt} for the population-level two-parameter logistic IRT model above are in the additional subscripts for $r$ to $\eta$ and $\beta$.
+In Equation \ref{eq:pop_grm}, $\eta_{ktqr}$ is the expected probability that a random individual in country $k$ at time $t$ replies to question $q$ with a response at least as positive as response $r$.
+And the additional subscript to $\beta_{qr}$ indicates that this parameter represents the difficulty of response $r$ of question $q$, constrained to be increasing for increasing $r$. 
 
 A final addition to the model of the probability $\eta_{ktqr}$ takes into account differences in item response bias across countries.
 Responses to survey questions may vary across different countries not only as a result of differences in attitudes and preferences but also due to translation issues [see, e.g., @Davidov2010], cultural differences in acquiescence and extreme response styles [see, e.g., @VanHerk2004], or other idiosyncrasies---recall Tarrow's [-@Tarrow1971, 344] famous observation that the French understood survey questions regarding their 'interest in politics' as inquiring about the strength of their partisan affiliations.
