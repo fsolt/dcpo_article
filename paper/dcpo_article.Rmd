@@ -133,22 +133,22 @@ The equation's denominator implies that $\eta_{ktqr}$ is drawn closer to 50% as 
 Given this expected probability $\eta_{ktqr}$, the total number of survey responses at least as positive as $r$ to each question $q$ in country $k$ at time $t$, $y_{ktqr}$, out of the total number of respondents surveyed, $n_{ktqr}$, is then modeled using the beta-binomial distribution, which allows for an overall dispersion parameter, $\phi$, to account for additional sources of survey error [see @McGann2014, 120; @Claassen2019, 4-5].
 
 \begin{equation}
-a_{ktqr} = \phi\eta_{ktqr} 
+a_{ktqr} = \phi\eta_{ktqr} \label{eq:bb_a}
 \end{equation}
 \begin{equation}
-b_{ktqr} = \phi(1 - \eta_{ktqr})
+b_{ktqr} = \phi(1 - \eta_{ktqr}) \label{eq:bb_b}
 \end{equation}
 \begin{equation}
-y_{ktqr} \sim \textrm{BetaBinomial}(n_{ktqr}, a_{ktqr}, b_{ktqr})
+y_{ktqr} \sim \textrm{BetaBinomial}(n_{ktqr}, a_{ktqr}, b_{ktqr}) \label{eq:betabinomial}
 \end{equation}
 
-To estimate the dynamics of comparative public opinion, the change over time, the prior distribution for each of the public opinion parameters in Equation \ref{eq:dcpo}, $\bar{\theta'}_{kt}$ and $\sigma_{kt}$, is given by a simple local-level dynamic linear transition model:
+Then, to estimate the dynamics of comparative public opinion---the change over time---the prior distribution for each of the public opinion parameters in Equation \ref{eq:dcpo}, $\bar{\theta'}_{kt}$ and $\sigma_{kt}$, is given by a simple local-level dynamic linear transition model:
 
 \begin{equation}
-\bar{\theta}_{kt} \sim \textrm{N}(\bar{\theta'}_{k,t-1}, \sigma_{\bar{\theta'}}^2)
+\bar{\theta}_{kt} \sim \textrm{N}(\bar{\theta'}_{k,t-1}, \sigma_{\bar{\theta'}}^2) \label{eq:prior_theta}
 \end{equation}
 \begin{equation}
-\sigma_{kt} \sim \textrm{N}(\sigma_{k,t-1}, \sigma_{\sigma}^2)
+\sigma_{kt} \sim \textrm{N}(\sigma_{k,t-1}, \sigma_{\sigma}^2) \label{eq:prior_sigma}
 \end{equation}
 
 By treating these parameters' values at time $t-1$ as their expected values at time $t$, these priors work to smooth estimates of both the mean and the standard deviation of the latent trait in the population of each country over time.
