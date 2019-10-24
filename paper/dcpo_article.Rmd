@@ -46,7 +46,7 @@ library(huxtable)
 library(kableExtra)
 library(DCPOtools)
 library(tidyverse)
-
+library(latex2exp)
 ```
 
 A wealth of surveys provide information on the state of public opinion on various issues in different countries over the years, but scholars have faced significant hurdles to putting all of this information to use in any comparative study.  The most challenging of these obstacles is that, across countries and over time, the questions asked regarding any given issue are rarely the same, making responses to these questions incomparable.
@@ -81,36 +81,94 @@ question of feedback: positive or negative? ("policies create constituencies" vs
 ## Estimating Dynamic Comparative Public Opinion
 
 
-The logic underlying DCPO's approach to estimating dynamic comparative public opinion starts at the individual level with the two-parameter logistic IRT model.  In this model, the probability that individual $i$ responds affirmatively to a dichotomous question $q$ is a function of three parameters:
+The logic underlying DCPO's approach to estimating dynamic comparative public opinion starts at the individual level with the two-parameter logistic (or "2PL") IRT model.  In this model, the probability that individual $i$ responds affirmatively to a dichotomous question $q$ is a function of the individual's score on the unbounded latent trait, $\theta'_{i}$, plus two parameters that characterize the question, its *difficulty*, $\beta_{q}$, and its *dispersion*, $\alpha_{q}$:
 
 \begin{equation}
-Pr(Y_{iq} = 1) = \textrm{logit}^{-1}(\frac{\theta'_{i} - \beta_{q}}{\alpha_{q}}) \label{eq:irt}
+\textrm{Pr}(y_{iq} = 1) = \textrm{logit}^{-1}(\frac{\theta'_{i} - \beta_{q}}{\alpha_{q}}) \label{eq:irt}
 \end{equation}
 
-First, the individual's score on the unbounded latent trait, $\theta'_{i}$; individuals with higher scores are more likely to give an affirmative response.
-Second, the *difficulty* of the question, $\beta_{q}$.
-As the question's difficulty increases, individuals are less likely to respond affirmatively, and vice versa.
+Figure \ref{fig:irt} shows how these parameters interact using simulated data.
+First, both panels show that regardless of the question, as an individual's score on the unbounded latent trait, $\theta'_{i}$, increases, the individual becomes more likely to give an affirmative response.
+Second, the left panel reveals that individuals with the same score on the latent trait are less likely to respond affirmatively to a question as the question's difficulty, $\beta_{q}$, increases; here, all three questions depicted have a dispersion of 1.
 When $\theta'_{i}$ and $\beta_{q}$ are equal, the probability of an affirmative response is 50%. 
-Third, the *dispersion* of the question, $\alpha_{q}$, which is proportional to the measurement error of the question.
-As the question's dispersion increases, individuals with lower scores on the latent trait become more likely to respond affirmatively and those with higher scores on the latent trait are more likely to respond negatively; in other words, the slope of the curve describing the relationship between the latent trait and the probability of answering affirmatively flattens out.
+Third, the right panel shows that as the *dispersion* of the question, $\alpha_{q}$, which is proportional to its measurement error, increases, individuals with lower scores on the latent trait become more likely to respond affirmatively and those with higher scores on the latent trait are more likely to respond negatively; in other words, the slope of the curve describing the relationship between the latent trait and the probability of answering affirmatively flattens out.
 
-If scores on the unbounded latent trait are modeled as normally distributed within the population of country $k$ at time $t$, then the population-level two-parameter logistic IRT model is:
+```{r irt, fig.width=6, fig.height=3, fig.cap="\\label{fig:irt}Probability of an Affirmative Response in the 2PL IRT Model"}
+tibble(theta = rep(seq(-3, 3, length.out = 100), 6),
+       beta = rep(c(-2, 0, 2, 0, 0, 0), each = 100),
+       alpha = rep(c(1, 1, 1, .25, 1, 2), each = 100),
+       pr_y = plogis((theta - beta)/alpha),
+       line_no = rep(1:6, each = 100),
+       plot_facet = rep(c("Question Difficulty", "Question Dispersion"), each = 300)) %>% 
+    ggplot(aes(theta, pr_y, group = line_no)) +
+    geom_line() +
+    facet_wrap( ~ plot_facet) +
+    xlab(TeX("Individual Latent Trait")) +
+    ylab(TeX("Pr(y_{iq} = 1)")) +
+    theme_bw() +
+    theme(strip.background = element_rect(colour="white", fill="white"),
+          plot.title.position = "plot") +
+    scale_x_continuous(breaks = seq(-3, 3, 1)) +
+    geom_text(data = tibble(theta = -2.25,
+                            pr_y = .65,
+                            line_no = 1,
+                            plot_facet = "Question Difficulty",),
+             label = TeX("$\\beta_1 = -2$", output = "character"), parse = TRUE) +
+    geom_text(data = tibble(theta = -.6,
+                            pr_y = .525,
+                            line_no = 1,
+                            plot_facet = "Question Difficulty",),
+              label = TeX("$\\beta_2 = 0$", output = "character"), parse = TRUE) +
+    geom_text(data = tibble(theta = .9,
+                            pr_y = .4,
+                            line_no = 1,
+                            plot_facet = "Question Difficulty",),
+              label = TeX("$\\beta_3 = 2$", output = "character"), parse = TRUE) +
+    geom_text(data = tibble(theta = 2.5,
+                            pr_y = 0.025,
+                            line_no = 1,
+                            plot_facet = "Question Difficulty",),
+              label = TeX("$\\alpha_q = 1$", output = "character"), parse = TRUE) +
+    geom_text(data = tibble(theta = 0,
+                            pr_y = .96,
+                            line_no = 1,
+                            plot_facet = "Question Dispersion",),
+             label = TeX("$\\alpha_1 = .25$", output = "character"), parse = TRUE) +
+    geom_text(data = tibble(theta = 1.5,
+                            pr_y = .9,
+                            line_no = 1,
+                            plot_facet = "Question Dispersion",),
+              label = TeX("$\\alpha_2 = 1$", output = "character"), parse = TRUE) +
+    geom_text(data = tibble(theta = 2.1,
+                            pr_y = .66,
+                            line_no = 1,
+                            plot_facet = "Question Dispersion",),
+              label = TeX("$\\alpha_3 = 2$", output = "character"), parse = TRUE) +
+    geom_text(data = tibble(theta = 2.5,
+                            pr_y = 0.025,
+                            line_no = 1,
+                            plot_facet = "Question Dispersion",),
+              label = TeX("$\\beta_q = 0$", output = "character"), parse = TRUE)
+
+```
+
+To aggregate individual-level responses to generate a population-level estimate of public opinion is a matter of integration.
+If scores on the unbounded latent trait are modeled as normally distributed within the population of country $k$ at time $t$, integrating Equation \ref{eq:irt} yields the population-level two-parameter logistic IRT model:
 
 \begin{equation}
 \eta_{ktq} = \textrm{logit}^{-1}(\frac{\bar{\theta'}_{kt} - \beta_{q}}{\sqrt{\alpha_{q}^2 + (1.7*\sigma_{kt})^2}}) \label{eq:pop_irt}
 \end{equation}
-
-where $\eta_{ktq}$ is the expected probability that a random person in country $k$ at time $t$ answers question $q$ affirmatively and $\bar{\theta'}_{kt}$ and $\sigma_{kt}$ are the mean and standard deviation of the unbounded latent trait $\theta'$ in the population of country $k$ at time $t$ [see @Mislevy1983, 280; see also, using the probit IRT model, @McGann2014, 120].
+where $\eta_{ktq}$ is the expected probability that a random person in country $k$ at time $t$ answers question $q$ affirmatively and $\bar{\theta'}_{kt}$ and $\sigma_{kt}$ are the mean and standard deviation of the unbounded latent trait $\theta'$ in the population of country $k$ at time $t$ [see @Mislevy1983, 280; see also, using the two-parameter probit IRT model, @McGann2014, 120; @Caughey2015, 200].
 
 Further, many survey questions are not simply dichotomous, but instead measure respondents' attitudes on ordinal scales, assumed here to range from 1 to $R$.
-To take advantage of this additional information, the cumulative logit formulation is used, in which the probability to be estimated is not that individual $i$ provided a simple affirmative response, as in Equation \ref{eq:pop_irt} above, but instead the probability that individual $i$ provided a response at least as positive as response $r$ for all $r$ greater than 1 and less than or equal to $R$.
+To take advantage of this additional information, DCPO uses the cumulative logit formulation, in which the probability to be estimated is not that individual $i$ provided a simple affirmative response, as in Equation \ref{eq:pop_irt} above, but instead the probability that individual $i$ provided a response at least as positive as response $r$ for all $r$ greater than 1 and less than or equal to $R$.
 This yields a population-level graded response model:
 
 \begin{equation}
 \eta_{ktqr} = \textrm{logit}^{-1}(\frac{\bar{\theta'}_{kt} - \beta_{qr}}{\sqrt{\alpha_{q}^2 + (1.7*\sigma_{kt})^2}}) \label{eq:pop_grm}
 \end{equation}
 
-The differences between Equation \ref{eq:pop_grm} for the population-level graded response model and Equation \ref{eq:pop_irt} for the population-level two-parameter logistic IRT model above are in the additional subscripts for $r$ to $\eta$ and $\beta$.
+Again, the differences between Equation \ref{eq:pop_grm} for the population-level graded response model and Equation \ref{eq:pop_irt} for the population-level two-parameter logistic IRT model above are in the additional subscripts for $r$ to $\eta$ and $\beta$.
 In Equation \ref{eq:pop_grm}, $\eta_{ktqr}$ is the expected probability that a random individual in country $k$ at time $t$ replies to question $q$ with a response at least as positive as response $r$.
 And the additional subscript to $\beta_{qr}$ indicates that this parameter represents the difficulty of response $r$ of question $q$, constrained to be increasing for increasing $r$. 
 
@@ -150,7 +208,6 @@ Then, to estimate the dynamics of comparative public opinion---the change over t
 \begin{equation}
 \sigma_{kt} \sim \textrm{N}(\sigma_{k,t-1}, \sigma_{\sigma}^2) \label{eq:prior_sigma}
 \end{equation}
-
 By treating these parameters' values at time $t-1$ as their expected values at time $t$, these priors work to smooth estimates of both the mean and the standard deviation of the latent trait in the population of each country over time.
 If no survey data is available for a particular time, these models provide estimates based on the estimates for previous and subsequent periods.
 The variances $\sigma_{\bar{\theta'}}^2$ and $\sigma_{\sigma}^2$ are estimated from the data.
@@ -166,7 +223,7 @@ To ensure that [...], the sum of $\delta_{kq}$ across all countries $k$ is fixed
 \end{equation}
 
 The dispersion parameters $\alpha$ are constrained to be positive.  
-One user-specified difficulty parameter $beta$ is fixed to a value of 1.  
+One user-specified difficulty parameter $\beta$ is set to a value of 1 to fix the .  
 The dispersion parameter $\phi$ for the beta-binomial model is given a $\Gamma(4, .01)$ prior.
 
 
@@ -181,13 +238,13 @@ Actual countries' levels of public opinion toward immigration are better underst
 It is not surprising, then, that earlier works aggregating public opinion within a single country presented results on bounded scales [see @Stimson1991; @McGann2014].
 Even if the issue in question is less easily viewed as bounded, bounding is still a good idea because it reduces the uncertainty for the estimates for countries at the extremes, that is, those countries that should in fact be easier to estimate.
 As Linzer and Staton [-@Linzer2015, 229] note, "bounding the latent variable may do little harm to the scale and produce more sensible estimates of uncertainty."
-DCPO therefore uses the standard cumulative normal distribution function to transform the unbounded estimates, $\bar{\theta'}_{kt}$, to the unit interval:
+DCPO therefore uses the logistic function to transform the unbounded estimates, $\bar{\theta'}_{kt}$, to the unit interval:
 
 \begin{equation}
-\bar{\theta}_{kt} = \Phi({\bar{\theta'}_{kt}} - 1)
+\bar{\theta}_{kt} = \textrm{logit}^{-1}({\bar{\theta'}_{kt}} - 1)
 \end{equation}
 
-The resulting $\bar{\theta}_{kt}$ is the DCPO estimate of aggregate public opinion for country $k$ at time $t$.
+The resulting $\bar{\theta}_{kt}$ is the DCPO estimate of the mean aggregate public opinion for country $k$ at time $t$.
 
 
 
@@ -210,7 +267,7 @@ comparison_ht <- comparison_data %>%
     add_colnames() %>% 
     set_bold(1, 1:5, TRUE) %>% 
     set_bottom_border(1, 1:5, 1) %>%
-    set_caption('Comparing IRT Models of Aggregate Public Opinion') %>% 
+    set_caption('Comparing Models of Aggregate Public Opinion') %>% 
     set_position("left") %>% 
     set_escape_contents(everywhere, everywhere, FALSE) %>% 
     set_background_color(evens, everywhere, "grey95") %>% 
@@ -240,16 +297,16 @@ Further, this allows a broadly comparative approach that is new to work on the r
 
 
 ```{r validation}
-load("~/Documents/Projects/dcpo_article/data/church_21_2k_09-27-01-14.rda")
-ivt_dcpo <- DCPOtools::internal_validation_tests(demsup_data, out1)
-
-load("~/Documents/Projects/dcpo_article/data/claassen_m5_1k_07-15-10-25.rda")
-ivt_claassen <- DCPOtools::internal_validation_tests(demsup_claassen, claassen_m5, "claassen")
-
-load("~/Documents/Projects/dcpo_article/data/dgirt/demsup_dgirt_50_08-13-01-55.rda")
-ivt_dgirt <- DCPOtools::internal_validation_tests(demsup_data_dgirt, out1, "dgirt")
-
-bind_rows(ivt_claassen, ivt_dgirt, ivt_dcpo) %>% 
-    select(-loo_ic)
+# load("~/Documents/Projects/dcpo_article/data/church_21_2k_09-27-01-14.rda")
+# ivt_dcpo <- DCPOtools::internal_validation_tests(demsup_data, out1)
+# 
+# load("~/Documents/Projects/dcpo_article/data/claassen_m5_1k_07-15-10-25.rda")
+# ivt_claassen <- DCPOtools::internal_validation_tests(demsup_claassen, claassen_m5, "claassen")
+# 
+# load("~/Documents/Projects/dcpo_article/data/dgirt/demsup_dgirt_50_08-13-01-55.rda")
+# ivt_dgirt <- DCPOtools::internal_validation_tests(demsup_data_dgirt, out1, "dgirt")
+# 
+# bind_rows(ivt_claassen, ivt_dgirt, ivt_dcpo) %>% 
+#     select(-loo_ic)
 ```
 
