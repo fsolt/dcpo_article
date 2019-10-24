@@ -6,7 +6,7 @@ output:
     fig_caption: true
     latex_engine: pdflatex
     template: svm-latex-ms2.tex
-title: "Dynamic Comparative Public Opinion"
+title: "Modeling Dynamic Comparative Public Opinion"
 thanks: "The paper's revision history and the materials needed to reproduce its analyses can be found [on Github here](http://github.com/fsolt/dcpo_article).  I am grateful for comments received at the 2014 meetings of the European Political Science Association and American Political Science Association, the 2016 meeting of the Midwest Political Science Association, and at Princeton University, Oxford University, the University of Tennessee, the University of Iowa, Central European University, and the Polish Academy of Sciences.  Corresponding author: [frederick-solt@uiowa.edu](mailto:frederick-solt@uiowa.edu). Current version: `r format(Sys.time(), '%B %d, %Y')`."
 author:
 - name: Frederick Solt
@@ -56,7 +56,9 @@ As a result, the most common approach to the study of comparative public opinion
 
 A growing body of work is taking a different tack, examining the dynamics of public opinion in single countries over time.  These studies draw on
 
-(Not using stimson: Hobolt2008, McGann2014, Stubager2015)
+(Not using stimson: 
+@Hobolt2008 
+Stubager2015)
 
 dynamic comparative: Hagemann2016
 
@@ -212,31 +214,13 @@ By treating these parameters' values at time $t-1$ as their expected values at t
 If no survey data is available for a particular time, these models provide estimates based on the estimates for previous and subsequent periods.
 The variances $\sigma_{\bar{\theta'}}^2$ and $\sigma_{\sigma}^2$ are estimated from the data.
 
-### Identification, Priors, and Estimation
-
-For each question $q$, $\delta_{kq}$ are constrained to have mean equal to zero.
-
-To ensure that [...], the sum of $\delta_{kq}$ across all countries $k$ is fixed to zero for each question $q$:
-
-\begin{equation}
-\sum_{k = 1}^K \delta_{kq} = 0
-\end{equation}
-
-The dispersion parameters $\alpha$ are constrained to be positive.  
-One user-specified difficulty parameter $\beta$ is set to a value of 1 to fix the .  
-The dispersion parameter $\phi$ for the beta-binomial model is given a $\Gamma(4, .01)$ prior.
-
-
-
-### Bounded
-
 Previous efforts to measure cross-national aggregate public opinion as a latent variable have generated estimates on an unbounded scale with mean zero and unit variance [see @Claassen2019, 14; @Caughey2019, 8], and this is the scale of $\bar{\theta'}_{kt}$.
 However, like many other concepts in political science [see @Linzer2015, 229], many aspects of public opinion are conceptually bounded, that is, it make sense to think of them as lying along a scale from fully absent to fully present in the relevant public.
 Take attitudes toward immigration as an example.
 One hypothetical country's citizens are, at a given time, absolutely opposed to any immigration, while another's are completely welcoming to migrants.
 Actual countries' levels of public opinion toward immigration are better understood not as unbounded but as falling somewhere between the bounds described by these two hypothetical countries.
 It is not surprising, then, that earlier works aggregating public opinion within a single country presented results on bounded scales [see @Stimson1991; @McGann2014].
-Even if the issue in question is less easily viewed as bounded, bounding is still a good idea because it reduces the uncertainty for the estimates for countries at the extremes, that is, those countries that should in fact be easier to estimate.
+Even if the issue in question is less easily viewed as bounded, bounding is still a good idea because it reduces the uncertainty for the estimates for countries at the extremes, that is, those countries whose values should in fact be easier to estimate.
 As Linzer and Staton [-@Linzer2015, 229] note, "bounding the latent variable may do little harm to the scale and produce more sensible estimates of uncertainty."
 DCPO therefore uses the logistic function to transform the unbounded estimates, $\bar{\theta'}_{kt}$, to the unit interval:
 
@@ -246,6 +230,25 @@ DCPO therefore uses the logistic function to transform the unbounded estimates, 
 
 The resulting $\bar{\theta}_{kt}$ is the DCPO estimate of the mean aggregate public opinion for country $k$ at time $t$.
 
+
+### Identification, Priors, and Estimation
+
+For each question $q$, $\delta_{kq}$ are constrained to have mean equal to zero.
+
+To ensure identification, the sum of $\delta_{kq}$ across all countries $k$ is fixed to zero for each question $q$:
+
+\begin{equation}
+\sum_{k = 1}^K \delta_{kq} = 0
+\end{equation}
+
+The dispersion parameters $\alpha$ are constrained to be positive.  
+One specified difficulty parameter $\beta$ is set to a value of 1 to fix location.  
+
+Subject to these constraints, weakly informative standard normal priors are placed on the parameters, with two exceptions.
+The overall dispersion parameter, $\phi$, receives a $\Gamma(4, 0.1)$ prior that yields well-scaled values.
+
+
+### Bounded
 
 
 %McGann2014, 125: ``the IRT model has the added advantages of being better justified in terms of individual-level behavior and the additional parameters (the polarization of the population in terms of policy mood) are substantively interesting.''
