@@ -174,7 +174,7 @@ Again, the differences between Equation \ref{eq:pop_grm} for the population-leve
 In Equation \ref{eq:pop_grm}, $\eta_{ktqr}$ is the expected probability that a random individual in country $k$ at time $t$ replies to question $q$ with a response at least as positive as response $r$.
 And the additional subscript to $\beta_{qr}$ indicates that this parameter represents the difficulty of response $r$ of question $q$, constrained to be increasing for increasing $r$. 
 
-A final addition to the model of the probability $\eta_{ktqr}$ takes into account differences in item response bias across countries.
+A final addition to the DCPO model of the probability $\eta_{ktqr}$ takes into account differences in item response bias across countries.
 Responses to survey questions may vary across different countries not only as a result of differences in attitudes and preferences but also due to translation issues [see, e.g., @Davidov2010], cultural differences in acquiescence and extreme response styles [see, e.g., @VanHerk2004], or other idiosyncrasies---recall Tarrow's [-@Tarrow1971, 344] famous observation that the French understood survey questions regarding their 'interest in politics' as inquiring about the strength of their partisan affiliations.
 Rather than simply allowing such problems of equivalence to contribute to the error of the model, they can be addressed explicitly by modeling the country-specific item bias  [@Stegmueller2011], denoted here as $\delta_{kq}$.^[
 Claassen's [-@Claassen2019, 5-6] work employs this technique, and because estimating $\delta_{kq}$ requires data from repeated administrations of question $q$ in country $k$, it discards survey data that does not meet this requirement.
@@ -202,13 +202,13 @@ b_{ktqr} = \phi(1 - \eta_{ktqr}) \label{eq:bb_b}
 y_{ktqr} \sim \textrm{BetaBinomial}(n_{ktqr}, a_{ktqr}, b_{ktqr}) \label{eq:betabinomial}
 \end{equation}
 
-Then, to estimate the dynamics of comparative public opinion---the change over time---the prior distribution for each of the public opinion parameters in Equation \ref{eq:dcpo}, $\bar{\theta'}_{kt}$ and $\sigma_{kt}$, is given by a simple local-level dynamic linear transition model:
+Then, to estimate the dynamics of comparative public opinion---the change over time---the prior distributions for the public opinion parameters in Equation \ref{eq:dcpo}, $\bar{\theta'}_{kt}$ and $\sigma_{kt}$, are given by simple local-level dynamic linear  models:
 
 \begin{equation}
 \bar{\theta}_{kt} \sim \textrm{N}(\bar{\theta'}_{k,t-1}, \sigma_{\bar{\theta'}}^2) \label{eq:prior_theta}
 \end{equation}
 \begin{equation}
-\sigma_{kt} \sim \textrm{N}(\sigma_{k,t-1}, \sigma_{\sigma}^2) \label{eq:prior_sigma}
+\sigma_{kt} \sim \textrm{LN}(\sigma_{k,t-1}, \sigma_{\sigma}^2) \label{eq:prior_sigma}
 \end{equation}
 By treating these parameters' values at time $t-1$ as their expected values at time $t$, these priors work to smooth estimates of both the mean and the standard deviation of the latent trait in the population of each country over time.
 If no survey data is available for a particular time, these models provide estimates based on the estimates for previous and subsequent periods.
@@ -227,28 +227,24 @@ DCPO therefore uses the logistic function to transform the unbounded estimates, 
 \begin{equation}
 \bar{\theta}_{kt} = \textrm{logit}^{-1}({\bar{\theta'}_{kt}} - 1)
 \end{equation}
+The resulting $\bar{\theta}_{kt}$ is the DCPO estimate of the mean public opinion for country $k$ at time $t$.
+Together, $\sigma_{kt}$, which provides a measure of polarization in public opinion, and $\bar{\theta}_{kt}$ will typically be the main quantities of interest.
 
-The resulting $\bar{\theta}_{kt}$ is the DCPO estimate of the mean aggregate public opinion for country $k$ at time $t$.
-
-
-### Identification, Priors, and Estimation
-
-For each question $q$, $\delta_{kq}$ are constrained to have mean equal to zero.
-
+The model is identified by imposing a series of constraints that fix location, direction, and scale.
+The dispersion parameters $\alpha$ are constrained to be positive---and all survey responses are coded to have the same polarity---to fix direction.
+One specified difficulty parameter $\beta$ is set to a value of 1 to identify location, and, as mentioned previously, for each question $q$ the difficulties for increasing response values $r$ are constrained to be increasing.
 To ensure identification, the sum of $\delta_{kq}$ across all countries $k$ is fixed to zero for each question $q$:
 
 \begin{equation}
 \sum_{k = 1}^K \delta_{kq} = 0
 \end{equation}
 
-The dispersion parameters $\alpha$ are constrained to be positive.  
-One specified difficulty parameter $\beta$ is set to a value of 1 to fix location.  
-
-Subject to these constraints, weakly informative standard normal priors are placed on the parameters, with two exceptions.
-The overall dispersion parameter, $\phi$, receives a $\Gamma(4, 0.1)$ prior that yields well-scaled values.
-
-
-### Bounded
+Weakly informative are placed on most parameters.
+The dispersion parameters $\alpha_{q}$ are drawn from standard half-normal prior distributions, that is, the positive half of N(0, 1).
+The first difficulty parameters for each question, $\beta_{q1}$, are drawn from standard normal prior distributions, and the differences between $\beta$s for each $r$ for the same question $q$ are drawn from standard half-normal prior distributions.
+The item-bias parameters $\delta_{kq}$ receive normally-distributed hierarchical priors with mean 0 and standard deviations drawn from standard half-normal prior distributions.
+The initial value of the mean unbounded latent trait for each country, $\bar{\theta'}_{k1}$, is assigned a standard normal prior, as are the transition variances $\sigma_{\bar{\theta'}}^2$ and $\sigma_{\sigma}^2$; the initial value of the standard deviation of the unbounded latent trait for each country, $\sigma_{k1}$, is drawn from a standard lognormal prior distribution.
+The overall dispersion, $\phi$, receives a more informative prior drawn from a gamma(4, 0.1) distribution that yields values well-scaled for that parameter.
 
 
 %McGann2014, 125: ``the IRT model has the added advantages of being better justified in terms of individual-level behavior and the additional parameters (the polarization of the population in terms of policy mood) are substantively interesting.''
@@ -270,7 +266,7 @@ comparison_ht <- comparison_data %>%
     add_colnames() %>% 
     set_bold(1, 1:5, TRUE) %>% 
     set_bottom_border(1, 1:5, 1) %>%
-    set_caption('Comparing Models of Aggregate Public Opinion') %>% 
+    set_caption('Comparing Models of Public Opinion') %>% 
     set_position("left") %>% 
     set_escape_contents(everywhere, everywhere, FALSE) %>% 
     set_background_color(evens, everywhere, "grey95") %>% 
