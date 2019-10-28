@@ -11,9 +11,3 @@ dcpo_demsup_kfold <- purrr::map(1:10, function(x) {
                                       })
 
 save(dcpo_demsup_kfold, file = file.path("data", "kfold", "dcpo_demsup_kfold.rda"))
-
-# put together separate files from HPC cluster into a single list
-
-# dcpo_demsup_kfold <- purrr::map(1:10, function(x) {
-#     rio::import(here::here(paste0("data/kfold/fold_", x, ".rda")), which = "demsup_kfold")
-# })
