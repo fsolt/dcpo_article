@@ -18,3 +18,5 @@ paper/cache/*
 paper/figures/old/
 paper/lit/
 paper/cda/
+data/claassen*
+data/kfold/fold*
