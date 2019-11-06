@@ -65,4 +65,4 @@ validation_table <- bind_rows(validation_dcpo, validation_claassen) %>%
     set_background_color(final(1), everywhere, "white") %>% 
     set_font_size(final(1), everywhere, 8)
 
-save(validation_table, here::here("data", "validation_table.rda"))
+save(validation_table, file = here::here("data", "validation_table.rda"))
