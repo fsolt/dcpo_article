@@ -18,4 +18,5 @@ claassen_demsup_kfold <- purrr::map(1:10, function(x) {
 
 xvt_claassen_kfold <- get_claassen_xvt_results(claassen_demsup_kfold)
 
-save(list = c("claassen_demsup_kfold", "xvt_claassen_kfold"), file = file.path("data", "kfold", "claassen_demsup_kfold.rda"))
+save(list = ls() %>% str_subset("^(?!demsup)"),
+     file = file.path("data", "kfold", "claassen_demsup_kfold.rda"))
