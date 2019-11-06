@@ -38,14 +38,14 @@ validation_claassen <- bind_cols(ivt_claassen, xvt_claassen) %>%
 validation_table <- bind_rows(validation_dcpo, validation_claassen) %>% 
     transmute(`\\vtop{\\hbox{\\strut }\\hbox{\\strut }\\hbox{\\strut }\\hbox{\\strut Model}}` = model,
               `\\vtop{\\hbox{\\strut Mean}\\hbox{\\strut Absolute}\\hbox{\\strut Error}\\hbox{\\strut (MAE)}}` = mae,
-              `\\vtop{\\hbox{\\strut }\\hbox{\\strut Country-}\\hbox{\\strut Means}\\hbox{\\strut MAE}}` = cmmae,
+              `\\vtop{\\hbox{\\strut }\\hbox{\\strut Country-}\\hbox{\\strut Means}\\hbox{\\strut MAE}}` = sprintf("%.3f", cmmae),
               `\\vtop{\\hbox{\\strut \\% Im-}\\hbox{\\strut prove-}\\hbox{\\strut ment in}\\hbox{\\strut MAE}}` = improv_over_cmmae,
               `\\vtop{\\hbox{\\strut }\\hbox{\\strut $k$-fold}\\hbox{\\strut Mean}\\hbox{\\strut MAE}}` = mean_mae,
               `\\vtop{\\hbox{\\strut $k$-fold}\\hbox{\\strut Mean \\%}\\hbox{\\strut Improve-}\\hbox{\\strut ment}}` = mean_improv_over_cmmae,
               `\\vtop{\\hbox{\\strut $k$-fold 80\\%}\\hbox{\\strut Credible}\\hbox{\\strut Interval}\\hbox{\\strut Coverage}}` = coverage80ci) %>% 
     as_hux() %>% 
     add_colnames() %>% 
-    rbind(c(NA_character_, "Internal Validation Tests", NA_real_, NA_real_, "External Validation Tests", NA_real_, NA_real_), .) %>% 
+    rbind(c(NA_character_, "Internal Validation Tests", NA_character_, NA_real_, "External Validation Tests", NA_real_, NA_real_), .) %>% 
     merge_cells(1, 2:4) %>% 
     merge_cells(1, 5:7) %>% 
     set_bold(1:2, everywhere, TRUE) %>%
