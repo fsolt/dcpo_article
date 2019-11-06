@@ -14,11 +14,12 @@ xvt_dcpo <- DCPO::get_xvt_results(dcpo_demsup_kfold) %>%
 validation_dcpo <- bind_cols(ivt_dcpo, xvt_dcpo) %>% 
     mutate(model = "DCPO")
 
+
 # Claassen
 load(here::here("data", "claassen_m5_1k_07-15-10-25.rda"))
 ivt_claassen <- DCPOtools::internal_validation_tests(demsup_claassen, claassen_m5, "claassen")
 load(here::here("data", "kfold", "claassen_demsup_kfold.rda"))
-xvt_claassen <- xvt_claassen_kfold %>% 
+xvt_claassen <- get_claassen_xvt_results(claassen_demsup_kfold) %>% 
     filter(model == "k-fold mean") %>% 
     transmute(mean_mae = mae,
               mean_improv_over_cmmae = improv_over_cmmae,
@@ -27,13 +28,13 @@ xvt_claassen <- xvt_claassen_kfold %>%
 validation_claassen <- bind_cols(ivt_claassen, xvt_claassen) %>% 
     mutate(model = "Claassen (2019)")
 
-# DGIRT
-load(here::here("data","dgirt", "demsup_dgirt_50_10-29-04-29.rda"))
-ivt_dgirt <- DCPOtools::internal_validation_tests(demsup_data, out1, "dgirt")
-# 
-# bind_rows(ivt_claassen, ivt_dgirt, ivt_dcpo) %>% 
-#     select(-loo_ic)
 
+# DGIRT
+# load(here::here("data","dgirt", "demsup_dgirt_50_10-29-04-29.rda"))
+# ivt_dgirt <- DCPOtools::internal_validation_tests(demsup_data, out1, "dgirt")
+
+
+# Make the table
 validation_table <- bind_rows(validation_dcpo, validation_claassen) %>% 
     transmute(`\\vtop{\\hbox{\\strut }\\hbox{\\strut }\\hbox{\\strut }\\hbox{\\strut Model}}` = model,
               `\\vtop{\\hbox{\\strut Mean}\\hbox{\\strut Absolute}\\hbox{\\strut Error}\\hbox{\\strut (MAE)}}` = mae,
