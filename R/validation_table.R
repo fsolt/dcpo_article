@@ -26,16 +26,20 @@ xvt_claassen <- get_claassen_xvt_results(claassen_demsup_kfold) %>%
               coverage80ci = coverage80ci)
 
 validation_claassen <- bind_cols(ivt_claassen, xvt_claassen) %>% 
-    mutate(model = "Claassen (2019)")
+    mutate(model = "\\vtop{\\hbox{\\strut Claassen (2019)}\\hbox{\\strut }}")
 
 
 # DGIRT
-# load(here::here("data","dgirt", "demsup_dgirt_50_10-29-04-29.rda"))
-# ivt_dgirt <- DCPOtools::internal_validation_tests(demsup_data, out1, "dgirt")
+load(here::here("data","dgirt", "demsup_dgirt_50_11-10-09-47.rda"))
+demsup <- read_csv("https://github.com/fsolt/DCPOtools/raw/master/inst/extdata/all_data_demsupport.csv")
+demsup_data <- DCPOtools::format_dgirt(demsup %>% DCPOtools::with_min_yrs(3))
+ivt_dgirt <- DCPOtools::internal_validation_tests(demsup_data, out1, "dgirt")
 
+validation_dgirt <- bind_cols(ivt_dgirt) %>% 
+    mutate(model = "\\vtop{\\hbox{\\strut Caughey, O'Grady,}\\hbox{\\strut  and Warshaw (2019)}}")
 
 # Make the table
-validation_table <- bind_rows(validation_dcpo, validation_claassen) %>% 
+validation_table <- bind_rows(validation_claassen, validation_dgirt, validation_dcpo) %>% 
     transmute(`\\vtop{\\hbox{\\strut }\\hbox{\\strut }\\hbox{\\strut }\\hbox{\\strut Model}}` = model,
               `\\vtop{\\hbox{\\strut Mean}\\hbox{\\strut Absolute}\\hbox{\\strut Error}\\hbox{\\strut (MAE)}}` = mae,
               `\\vtop{\\hbox{\\strut }\\hbox{\\strut Country-}\\hbox{\\strut Means}\\hbox{\\strut MAE}}` = sprintf("%.3f", cmmae),
@@ -48,13 +52,14 @@ validation_table <- bind_rows(validation_dcpo, validation_claassen) %>%
     rbind(c(NA_character_, "Internal Validation Tests", NA_character_, NA_real_, "External Validation Tests", NA_real_, NA_real_), .) %>% 
     merge_cells(1, 2:4) %>% 
     merge_cells(1, 5:7) %>% 
-    set_bold(1:2, everywhere, TRUE) %>%
+    set_bold(c(1:2,5), everywhere, TRUE) %>%
     set_top_border(1, everywhere, 1) %>%
     set_bottom_border(1:2, everywhere, 1) %>%
     set_bottom_border(final(1), everywhere, 1) %>% 
     set_caption('Internal and External Validation Tests') %>%
     set_position("left") %>%
     set_escape_contents(2, everywhere, FALSE) %>%
+    set_escape_contents(3:4, 1, FALSE) %>%
     set_background_color(odds, everywhere, "grey95") %>%
     set_background_color(1, everywhere, "white") %>%
     set_align("center") %>% 
