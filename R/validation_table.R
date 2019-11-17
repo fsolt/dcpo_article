@@ -67,6 +67,7 @@ validation_table <- bind_rows(validation_claassen, validation_dgirt, validation_
     add_rows(c("The internal validation test uses the same data for model fitting and validation; the external validation test employs k-fold validation with 10 folds, randomly dividing the data into tenths and then sequentially treating each tenth as a test set while fitting the model on a training set consisting of the remaining 90 percent of the data.  Percent improvement in MAE compares the model's MAE (column 1) and the corresponding country-mean MAE (column 2).", rep(NA_real_, 6))) %>% 
     merge_cells(final(1), 1:7) %>% 
     set_wrap(final(1), everywhere, TRUE) %>% 
+    set_bold(final(1), everywhere, FALSE) %>%
     set_background_color(final(1), everywhere, "white") %>% 
     set_font_size(final(1), everywhere, 8)
 
