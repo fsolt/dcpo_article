@@ -6,7 +6,7 @@ output:
     fig_caption: true
     latex_engine: pdflatex
     template: svm-latex-ms2.tex
-title: "Modeling Dynamic Comparative Public Opinion"
+title: "Modeling Dynamic Comparative Public Opinion [DRAFT]"
 thanks: "The paper's revision history and the materials needed to reproduce its analyses can be found [on Github here](http://github.com/fsolt/dcpo_article).  I am grateful for comments received at the 2014 meetings of the European Political Science Association and American Political Science Association, the 2016 meeting of the Midwest Political Science Association, and at Princeton University, Oxford University, the University of Tennessee, the University of Iowa, Central European University, and the Polish Academy of Sciences.  Corresponding author: [frederick-solt@uiowa.edu](mailto:frederick-solt@uiowa.edu). Current version: `r format(Sys.time(), '%B %d, %Y')`."
 author:
 - name: Frederick Solt
@@ -49,36 +49,37 @@ library(tidyverse)
 library(latex2exp)
 ```
 
-A wealth of surveys provide information on the state of public opinion on various issues in different countries over the years, but scholars have faced significant hurdles to putting all of this information to use in any comparative study.  The most challenging of these obstacles is that, across countries and over time, the questions asked regarding any given issue are rarely the same, making responses to these questions incomparable.
+A wealth of surveys provide information on the state of public opinion on various issues in different countries over the years, but scholars have faced significant hurdles to putting all of this information to use in any comparative study.
+The most challenging of these obstacles is that, across countries and over time, the questions asked regarding any given issue are rarely the same, making responses to these questions incomparable.
 
-As a result, the most common approach to the study of comparative public opinion is to use a single cross-section, typically provided by a single cross-national survey [see, e.g., @Dalton2011, @Ansell2014].
-    Some works have captured some element of change over time by taking advantage of multiple waves of an ongoing cross-national survey [see, e.g., @Inglehart1997, @Inglehart2005] or, more rarely, drawing on multiple surveys that employed the same item [see, e.g., @Solt2011, @Ezrow2014].
+As a result, the most common approach to the study of comparative public opinion is to use a single cross-section, typically provided by a single cross-national survey [see, e.g., @Dalton2011; @Ansell2014].
+Some works have captured some element of change over time by taking advantage of multiple waves of an ongoing cross-national survey [see, e.g., @Inglehart1997; @Inglehart2005] or, more rarely, drawing on multiple surveys that employed the same item [see, e.g., @Solt2011; @Ezrow2014].
 
-A growing body of work is taking a different tack, examining the dynamics of public opinion in single countries over time.  These studies draw on
+<!-- A growing body of work is taking a different tack, examining the dynamics of public opinion in single countries over time.  These studies draw on -->
 
-(Not using stimson: 
-@Hobolt2008 
-Stubager2015)
+<!-- (Not using stimson:  -->
+<!-- @Hobolt2008  -->
+<!-- Stubager2015) -->
 
-dynamic comparative: Hagemann2016
+<!-- dynamic comparative: Hagemann2016 -->
 
-field of comparative public opinion
-lack of dynamics (in contrast to public opinion work in U.S.)
-Check out
-	Thomassen2011
-	Russell Dalton's work
-	Norris on trust (2011, 63-77)
-
-
-problem: 	scarce data
-		perennial problem of public opinion research: exact question wanted is rarely asked
-		no (good) way to (fully) integrate what does exist
-
-question of feedback: positive or negative? ("policies create constituencies" vs. thermostatic) under what conditions?
+<!-- field of comparative public opinion -->
+<!-- lack of dynamics (in contrast to public opinion work in U.S.) -->
+<!-- Check out -->
+<!-- 	Thomassen2011 -->
+<!-- 	Russell Dalton's work -->
+<!-- 	Norris on trust (2011, 63-77) -->
 
 
+<!-- problem: 	scarce data -->
+<!-- 		perennial problem of public opinion research: exact question wanted is rarely asked -->
+<!-- 		no (good) way to (fully) integrate what does exist -->
 
-(Treier and Jackman 2008; Pemstein, Meserve, and Melton 2010, [Arel-Bundock and Mebane 2011]) 
+<!-- question of feedback: positive or negative? ("policies create constituencies" vs. thermostatic) under what conditions? -->
+
+
+
+<!-- (Treier and Jackman 2008; Pemstein, Meserve, and Melton 2010, [Arel-Bundock and Mebane 2011])  -->
 
 ## Estimating Dynamic Comparative Public Opinion
 
@@ -280,28 +281,32 @@ comparison_ht
 
 
 
-
-## Conclusions
-strengths:
-    makes maximum use of available data
-	permits testing hypotheses regarding change over time
-	incorporates uncertainty
-
-weaknesses:
-	data collection demands
-	challenges at individual level (but subsets)
-
-
-
-Single-country studies of public opinion have flourished since the release of Stimson's [-@Stimson1991] algorithm for identifying the common trends in any collection of survey questions that have been repeatedly asked over many years.  By extending this work to allow the creation of cross-national pooled time series that identify how public opinion varies both across countries and over time, DCPO has the potential to trigger a new wave of research on the causes and consequences of public opinion that will take into account the experiences of many countries.
-
-Further, this allows a broadly comparative approach that is new to work on the relationship between opinion and policy.  Existing studies on that examine this topic over time investigate only a single country or, much more rarely, a handful of countries.  By examining a broad sample of democracies, DCPO helps researchers avoid conclusions based on the idiosyncrasies of any given political setting and provide a firmer grounding for our understanding of how democracies work and the threats to representation that they face.
-
-
 ```{r validation}
 load(here::here("data", "validation_table.rda"))
 
 validation_table
 ```
 
-Re reproducibility: @Damian2019
+
+## Conclusions
+<!-- strengths: -->
+<!--     makes maximum use of available data -->
+<!-- 	permits testing hypotheses regarding change over time -->
+<!-- 	incorporates uncertainty -->
+
+<!-- weaknesses: -->
+<!-- 	data collection demands -->
+<!-- 	challenges at individual level (but subsets) -->
+
+Single-country studies of public opinion have flourished since the release of Stimson's [-@Stimson1991] algorithm for identifying the common trends in any collection of survey questions that have been repeatedly asked over many years.
+By extending this work to allow the creation of cross-national pooled time series that identify how public opinion varies both across countries and over time, DCPO has the potential to trigger a new wave of research on the causes and consequences of public opinion that will take into account the experiences of many countries.
+
+Further, this allows a broadly comparative approach that is new to work on the relationship between opinion and policy.
+Existing studies on that examine this topic over time investigate only a single country or, much more rarely, a handful of countries.
+By examining a broad sample of democracies, DCPO helps researchers avoid conclusions based on the idiosyncrasies of any given political setting and provide a firmer grounding for our understanding of how democracies work and the threats to representation that they face.
+
+
+<!-- Re reproducibility: @Damian2019 -->
+
+\pagebreak
+
