@@ -266,6 +266,7 @@ comparison_ht <- comparison_data %>%
     as_hux() %>% 
     add_colnames() %>% 
     set_bold(1, 1:5, TRUE) %>% 
+    set_bold(everywhere, final(1), TRUE) %>% 
     set_top_border(1, everywhere, 1) %>%
     set_bottom_border(1, 1:5, 1) %>%
     set_bottom_border(final(1), everywhere, 1) %>% 
