@@ -15,7 +15,7 @@ abstract: "The study of public opinion in comparative context has been hampered 
 keywords: "public opinion, item response theory, measurement"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 fontsize: 11pt
-spacing: single
+spacing: double
 bibliography: \dummy{`r file.path(getwd(), list.files(getwd(), ".bib$"))`}
 biblio-style: apsr
 citecolor: black
@@ -177,15 +177,17 @@ And the additional subscript to $\beta_{qr}$ indicates that this parameter repre
 
 A final addition to the DCPO model of the probability $\eta_{ktqr}$ takes into account differences in item response bias across countries.
 Responses to survey questions may vary across different countries not only as a result of differences in attitudes and preferences but also due to translation issues [see, e.g., @Davidov2010], cultural differences in acquiescence and extreme response styles [see, e.g., @VanHerk2004], or other idiosyncrasies---recall Tarrow's [-@Tarrow1971, 344] famous observation that the French understood survey questions regarding their 'interest in politics' as inquiring about the strength of their partisan affiliations.
-Rather than simply allowing such problems of equivalence to contribute to the error of the model, they can be addressed explicitly by modeling the country-specific item bias  [@Stegmueller2011], denoted here as $\delta_{kq}$.^[
-Claassen's [-@Claassen2019, 5-6] work employs this technique, and because estimating $\delta_{kq}$ requires data from repeated administrations of question $q$ in country $k$, it discards survey data that does not meet this requirement.
-DCPO also incorporates $\delta_{kq}$ to capture country-specific item bias, but it takes a slightly different approach that aims to maximize the incorporation of available survey data: when responses to question $q$ are observed in country $k$ in only a single year, $\delta_{kq}$ is set to zero by assumption.
-This means that incorporating these 'one-shot' surveys will come at the cost of increasing the error of the model by any country-item bias that is present.]
+Rather than simply allowing such problems of equivalence to contribute to the error of the model, they can be addressed explicitly by modeling the country-specific item bias  [@Stegmueller2011], denoted here as $\delta_{kq}$.
 In the context of the population-level graded response model presented in Equation \ref{eq:pop_grm}, including country-specific item bias can be readily understood as a country-varying shift in the difficulty of each question:
 
 \begin{equation}
 \eta_{ktqr} = \textrm{logit}^{-1}(\frac{\bar{\theta'}_{kt} - (\beta_{qr} + \delta_{kq})}{\sqrt{\alpha_{q}^2 + (1.7*\sigma_{kt})^2}}) \label{eq:dcpo}
 \end{equation}
+Estimating $\delta_{kq}$ in Equation \ref{eq:dcpo} requires repeated administrations of question $q$ in country $k$.
+When responses to question $q$ are observed in country $k$ in only a single year, $\delta_{kq}$ is set to zero by assumption.
+This means that incorporating these 'one-shot' surveys will come at the cost of increasing the error of the model by any country-item bias that is present.^[
+_Pace_ Claassen's [-@Claassen2019, 5-6] approach, which is also to estimate country-specific item bias, but to discard survey data on questions that were not administered more than once in a given country.]
+Of course, questions that are asked repeatedly over time in only a single country pose no risk of country-specific item bias, so $\delta_{kq}$ in such cases can be set to zero without harm.
 
 Before continuing, we pause to briefly review the relationships of the parameters in this equation.
 The numerator of Equation \ref{eq:dcpo} implies first that $\eta_{ktqr}$, the expected probability of a response at least as positive as $r$, increases as the mean value of the latent trait in the population, $\bar{\theta'}_{kt}$, increases and second that $\eta_{ktqr}$ decreases with more difficult questions and higher response categories, $\beta_{qr}$, and particularly so where the item-response bias, $\delta_{kq}$, is positive.
@@ -240,7 +242,7 @@ To ensure identification, the sum of $\delta_{kq}$ across all countries $k$ is f
 \sum_{k = 1}^K \delta_{kq} = 0
 \end{equation}
 
-Weakly informative are placed on most parameters.
+Weakly informative priors are placed on most parameters.
 The dispersion parameters $\alpha_{q}$ are drawn from standard half-normal prior distributions, that is, the positive half of N(0, 1).
 The first difficulty parameters for each question, $\beta_{q1}$, are drawn from standard normal prior distributions, and the differences between $\beta$s for each $r$ for the same question $q$ are drawn from standard half-normal prior distributions.
 The item-bias parameters $\delta_{kq}$ receive normally-distributed hierarchical priors with mean 0 and standard deviations drawn from standard half-normal prior distributions.
@@ -263,22 +265,26 @@ comparison_data <- tibble::tribble(
 )
 
 comparison_ht <- comparison_data %>%
-    as_hux() %>% 
-    add_colnames() %>% 
-    set_bold(1, 1:5, TRUE) %>% 
-    set_bold(everywhere, final(1), TRUE) %>% 
-    set_top_border(1, everywhere, 1) %>%
-    set_bottom_border(1, 1:5, 1) %>%
-    set_bottom_border(final(1), everywhere, 1) %>% 
-    set_caption('Comparing Models of Public Opinion') %>% 
-    set_position("left") %>% 
-    set_escape_contents(everywhere, everywhere, FALSE) %>% 
-    set_background_color(evens, everywhere, "grey95") %>% 
-    set_align(-1, -1, "center")
+  as_hux() %>% 
+  add_colnames() %>% 
+  set_bold(1, 1:5, TRUE) %>% 
+  set_bold(everywhere, final(1), TRUE) %>% 
+  set_top_border(1, everywhere, 1) %>%
+  set_bottom_border(1, 1:5, 1) %>%
+  set_bottom_border(final(1), everywhere, 1) %>% 
+  set_caption('Comparing Models of Public Opinion') %>% 
+  set_position("left") %>% 
+  set_escape_contents(everywhere, everywhere, FALSE) %>% 
+  set_background_color(evens, everywhere, "grey95") %>% 
+  set_align(-1, -1, "center") %>% 
+  set_label("tab:comparison_table")
 
 comparison_ht
 
 ```
+
+Table \ref{tab:comparison_table} 
+
 
 
 
