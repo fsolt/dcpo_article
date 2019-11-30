@@ -26,7 +26,7 @@ xvt_claassen <- get_claassen_xvt_results(claassen_demsup_kfold) %>%
               coverage80ci = coverage80ci)
 
 validation_claassen <- bind_cols(ivt_claassen, xvt_claassen) %>% 
-    mutate(model = "\\vtop{\\hbox{\\strut Claassen (2019)}\\hbox{\\strut \\quad \\, Model 5}}")
+    mutate(model = "\\vtop{\\hbox{\\strut Claassen (2019)}\\hbox{\\strut Model 5}}")
 
 
 # DGIRT
