@@ -40,6 +40,7 @@ validation_dgirt <- bind_cols(ivt_dgirt) %>%
 
 # Make the table
 validation_table <- bind_rows(validation_claassen, validation_dgirt, validation_dcpo) %>% 
+    mutate(coverage80ci = if_else(coverage80ci > 80, paste0("+", round(coverage80ci - 80, 1)), as.character(round(coverage80ci - 80, 1)))) %>% 
     transmute(`\\vtop{\\hbox{\\strut }\\hbox{\\strut }\\hbox{\\strut }\\hbox{\\strut Model}}` = model,
               `\\vtop{\\hbox{\\strut Mean}\\hbox{\\strut Absolute}\\hbox{\\strut Error}\\hbox{\\strut (MAE)}}` = mae,
               `\\vtop{\\hbox{\\strut }\\hbox{\\strut Country-}\\hbox{\\strut Means}\\hbox{\\strut MAE}}` = sprintf("%.3f", cmmae),
