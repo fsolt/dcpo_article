@@ -113,11 +113,11 @@ claassen_xvt <- function(dcpo_input,
 
 #' @export
 get_claassen_xvt_results <- function(claassen_xvt_output, ci = 80) {
-  kfc <- assess_claassen_kfold_convergence(claassen_xvt_output = claassen_xvt_output)
-  if (nrow(kfc) > 0) {
-    cat("These estimates have not yet fully converged. Increase the number of iterations.\n")
-    print(kfc)
-  }
+  # kfc <- assess_claassen_kfold_convergence(claassen_xvt_output = claassen_xvt_output)
+  # if (nrow(kfc) > 0) {
+  #   cat("These estimates have not yet fully converged. Increase the number of iterations.\n")
+  #   print(kfc)
+  # }
 
  if (length(names(claassen_xvt_output)[3]) > 0) {
    xvt_results <- c_xvt(claassen_xvt_output = claassen_xvt_output, ci = ci)
