@@ -256,7 +256,7 @@ The overall dispersion, $\phi$, receives a more informative prior drawn from a g
 
 ```{r comparison_table}
 comparison_data <- tibble::tribble(
-    ~` `, ~`McGann (2014)`, ~`Claassen (2019)`, ~`\\vtop{\\hbox{\\strut Caughley, O'Grady,}\\hbox{\\strut and Warshaw (2019)}}`, ~DCPO,
+    ~` `, ~`McGann (2014)`, ~`\\vtop{\\hbox{\\strut Claassen (2019)}\\hbox{\\strut \\quad \\, Model 5}}`, ~`\\vtop{\\hbox{\\strut Caughley, O'Grady,}\\hbox{\\strut and Warshaw (2019)}}`, ~DCPO,
     "\\vtop{\\hbox{\\strut Cross-National}\\hbox{\\strut }}", "No", "Yes", "Yes", "Yes",
     "\\vtop{\\hbox{\\strut Ordinal}\\hbox{\\strut }}", "No", "No", "Yes", "Yes",
     "\\vtop{\\hbox{\\strut Country-Varying}\\hbox{\\strut Question Difficulty}}", "No", "Yes", "No", "Yes",
