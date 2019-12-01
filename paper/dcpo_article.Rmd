@@ -161,7 +161,7 @@ If scores on the unbounded latent trait are modeled as normally distributed with
 \begin{equation}
 \eta_{ktq} = \textrm{logit}^{-1}(\frac{\bar{\theta'}_{kt} - \beta_{q}}{\sqrt{\alpha_{q}^2 + (1.7*\sigma_{kt})^2}}) \label{eq:pop_irt}
 \end{equation}
-where $\eta_{ktq}$ is the expected probability that a random person in country $k$ at time $t$ answers question $q$ affirmatively and $\bar{\theta'}_{kt}$ and $\sigma_{kt}$ are the mean and standard deviation of the unbounded latent trait $\theta'$ in the population of country $k$ at time $t$ [see @Mislevy1983, 280; see also, using the two-parameter probit IRT model, @McGann2014, 120; @Caughey2015, 200].
+where $\eta_{ktq}$ is the expected probability that a random person in country $k$ at time $t$ answers question $q$ affirmatively and $\bar{\theta'}_{kt}$ and $\sigma_{kt}$ are the mean and standard deviation of the unbounded latent trait $\theta'$ in the population of country $k$ at time $t$ [see @Mislevy1983, 280; see also, using the two-parameter probit IRT model, @McGann2014, 120].
 
 Further, many survey questions are not simply dichotomous, but instead measure respondents' attitudes on ordinal scales, assumed here to range from 1 to $R$.
 To take advantage of this additional information, DCPO uses the cumulative logit formulation, in which the probability to be estimated is not that individual $i$ provided a simple affirmative response, as in Equation \ref{eq:pop_irt} above, but instead the probability that individual $i$ provided a response at least as positive as response $r$ for all $r$ greater than 1 and less than or equal to $R$.
@@ -189,7 +189,7 @@ This means that incorporating these 'one-shot' surveys will come at the cost of 
 _Pace_ Claassen's [-@Claassen2019, 5-6] approach, which is also to estimate country-specific item bias, but to discard survey data on questions that were not administered more than once in a given country.]
 Of course, questions that are asked repeatedly over time in only a single country pose no risk of country-specific item bias, so $\delta_{kq}$ in such cases can be set to zero without harm.
 
-Before continuing, we pause to briefly review the relationships of the parameters in this equation.
+Before continuing, it is useful to pause to briefly review the relationships of the parameters in this equation.
 The numerator of Equation \ref{eq:dcpo} implies first that $\eta_{ktqr}$, the expected probability of a response at least as positive as $r$, increases as the mean value of the unbounded latent trait in the population, $\bar{\theta'}_{kt}$, increases and second that $\eta_{ktqr}$ decreases with more difficult questions and higher response categories, $\beta_{qr}$, and particularly so where the item-response bias, $\delta_{kq}$, is positive.
 The equation's denominator implies that $\eta_{ktqr}$ is drawn closer to 50% as the geometric mean of the question's dispersion, $\alpha_{q}$, and the standard deviation in opinion in the population, $\sigma_{kt}$, increases: individuals sampled even from a population with a negative mean value on the unbounded latent trait and answering a difficult question will still be more likely to supply more positive responses---and those from a population with a positive mean score on the unbounded latent trait and answering an easy question will be more likely to supply more negative responses---if the question's dispersion is greater or attitudes are more polarized in the population.
 
@@ -247,21 +247,16 @@ The dispersion parameters $\alpha_{q}$ are drawn from standard half-normal prior
 The first difficulty parameters for each question, $\beta_{q1}$, are drawn from standard normal prior distributions, and the differences between $\beta$s for each $r$ for the same question $q$ are drawn from standard half-normal prior distributions.
 The item-bias parameters $\delta_{kq}$ receive normally-distributed hierarchical priors with mean 0 and standard deviations drawn from standard half-normal prior distributions.
 The initial value of the mean unbounded latent trait for each country, $\bar{\theta'}_{k1}$, is assigned a standard normal prior, as are the transition variances $\sigma_{\bar{\theta'}}^2$ and $\sigma_{\sigma}^2$; the initial value of the standard deviation of the unbounded latent trait for each country, $\sigma_{k1}$, is drawn from a standard lognormal prior distribution.
-The overall dispersion, $\phi$, receives a more informative prior drawn from a gamma(4, 0.1) distribution that yields values well-scaled for that parameter.
-
-
-%McGann2014, 125: ``the IRT model has the added advantages of being better justified in terms of individual-level behavior and the additional parameters (the polarization of the population in terms of policy mood) are substantively interesting.''
-
-
+The overall dispersion, $\phi$, receives a more informative prior drawn from a gamma(4, 0.1) distribution that yields values that are well scaled for that parameter.
 
 ```{r comparison_table}
 comparison_data <- tibble::tribble(
-    ~` `, ~`McGann (2014)`, ~`\\vtop{\\hbox{\\strut Claassen (2019)}\\hbox{\\strut \\quad \\, Model 5}}`, ~`\\vtop{\\hbox{\\strut Caughley, O'Grady,}\\hbox{\\strut and Warshaw (2019)}}`, ~DCPO,
+    ~` `, ~`McGann (2014)`, ~`\\vtop{\\hbox{\\strut Claassen (2019)}\\hbox{\\strut \\quad \\, Model 5}}`, ~`\\vtop{\\hbox{\\strut Caughey, O'Grady,}\\hbox{\\strut and Warshaw (2019)}}`, ~DCPO,
     "\\vtop{\\hbox{\\strut Cross-National}\\hbox{\\strut }}", "No", "Yes", "Yes", "Yes",
     "\\vtop{\\hbox{\\strut Ordinal}\\hbox{\\strut }}", "No", "No", "Yes", "Yes",
     "\\vtop{\\hbox{\\strut Country-Varying}\\hbox{\\strut Question Difficulty}}", "No", "Yes", "No", "Yes",
-    "\\vtop{\\hbox{\\strut Bounded}\\hbox{\\strut }}", "Yes", "No", "No", "Yes",
-    "\\vtop{\\hbox{\\strut Country-Year}\\hbox{\\strut Population Variance}}", "Yes", "No", "No", "Yes"
+    "\\vtop{\\hbox{\\strut Bounded Mean}\\hbox{\\strut Public Opinion}}", "Yes", "No", "No", "Yes",
+    "\\vtop{\\hbox{\\strut Country-Year Public}\\hbox{\\strut Opinion Std.~Deviation}}", "Yes", "No", "No", "Yes"
 )
 
 comparison_ht <- comparison_data %>%
@@ -283,8 +278,9 @@ comparison_ht
 
 ```
 
-Table \ref{tab:comparison_table} 
-
+Table \ref{tab:comparison_table} summarizes the DCPO model just described in comparison to three alternative ways of modeling of public opinion: that presented by @McGann2014, Claassen's [-@Claassen2019] preferred Model 5, and that employed in @Caughey2019.
+It reveals that DCPO incorporates the desirable features from each of those three models.
+DCPO generates estimates of public opinion that are comparable not only over time but also across countries, takes advantage of all of the information encoded in responses to ordinal questions, explicitly accounts for country-item bias by including terms to capture country-varying question difficulty, provides easily interpreted bounded estimates of mean public opinion, and includes parameters representing the extent to which public opinion is polarized in a country at each point in time.
 
 
 
