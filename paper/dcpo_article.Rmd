@@ -81,11 +81,9 @@ Some works have captured some element of change over time by taking advantage of
 
 <!-- (Treier and Jackman 2008; Pemstein, Meserve, and Melton 2010, [Arel-Bundock and Mebane 2011])  -->
 
-## Estimating Dynamic Comparative Public Opinion
-
+# Estimating Dynamic Comparative Public Opinion
 
 The logic underlying DCPO's approach to estimating dynamic comparative public opinion starts at the individual level with the two-parameter logistic (or "2PL") IRT model.  In this model, the probability that individual $i$ responds affirmatively to a dichotomous question $q$ is a function of the individual's score on the unbounded latent trait, $\theta'_{i}$, plus two parameters that characterize the question, its *difficulty*, $\beta_{q}$, and its *dispersion*, $\alpha_{q}$:
-
 \begin{equation}
 \textrm{Pr}(y_{iq} = 1) = \textrm{logit}^{-1}(\frac{\theta'_{i} - \beta_{q}}{\alpha_{q}}) \label{eq:irt}
 \end{equation}
@@ -157,7 +155,6 @@ tibble(theta = rep(seq(-3, 3, length.out = 100), 6),
 
 To aggregate individual-level responses to generate a population-level estimate of public opinion is a matter of integration.
 If scores on the unbounded latent trait are modeled as normally distributed within the population of country $k$ at time $t$, integrating Equation \ref{eq:irt} yields the population-level two-parameter logistic IRT model:
-
 \begin{equation}
 \eta_{ktq} = \textrm{logit}^{-1}(\frac{\bar{\theta'}_{kt} - \beta_{q}}{\sqrt{\alpha_{q}^2 + (1.7*\sigma_{kt})^2}}) \label{eq:pop_irt}
 \end{equation}
@@ -166,7 +163,6 @@ where $\eta_{ktq}$ is the expected probability that a random person in country $
 Further, many survey questions are not simply dichotomous, but instead measure respondents' attitudes on ordinal scales, assumed here to range from 1 to $R$.
 To take advantage of this additional information, DCPO uses the cumulative logit formulation, in which the probability to be estimated is not that individual $i$ provided a simple affirmative response, as in Equation \ref{eq:pop_irt} above, but instead the probability that individual $i$ provided a response at least as positive as response $r$ for all $r$ greater than 1 and less than or equal to $R$.
 This yields a population-level graded response model:
-
 \begin{equation}
 \eta_{ktqr} = \textrm{logit}^{-1}(\frac{\bar{\theta'}_{kt} - \beta_{qr}}{\sqrt{\alpha_{q}^2 + (1.7*\sigma_{kt})^2}}) \label{eq:pop_grm}
 \end{equation}
@@ -179,7 +175,6 @@ A final addition to the DCPO model of the probability $\eta_{ktqr}$ takes into a
 Responses to survey questions may vary across different countries not only as a result of differences in attitudes and preferences but also due to translation issues [see, e.g., @Davidov2010], cultural differences in acquiescence and extreme response styles [see, e.g., @VanHerk2004], or other idiosyncrasies---recall Tarrow's [-@Tarrow1971, 344] famous observation that the French understood survey questions regarding their 'interest in politics' as inquiring about the strength of their partisan affiliations.
 Rather than simply allowing such problems of equivalence to contribute to the error of the model, they can be addressed explicitly by modeling the country-specific item bias  [@Stegmueller2011], denoted here as $\delta_{kq}$.
 In the context of the population-level graded response model presented in Equation \ref{eq:pop_grm}, including country-specific item bias can be readily understood as a country-varying shift in the difficulty of each question:
-
 \begin{equation}
 \eta_{ktqr} = \textrm{logit}^{-1}(\frac{\bar{\theta'}_{kt} - (\beta_{qr} + \delta_{kq})}{\sqrt{\alpha_{q}^2 + (1.7*\sigma_{kt})^2}}) \label{eq:dcpo}
 \end{equation}
@@ -194,7 +189,6 @@ The numerator of Equation \ref{eq:dcpo} implies first that $\eta_{ktqr}$, the ex
 The equation's denominator implies that $\eta_{ktqr}$ is drawn closer to 50% as the geometric mean of the question's dispersion, $\alpha_{q}$, and the standard deviation in opinion in the population, $\sigma_{kt}$, increases: individuals sampled even from a population with a negative mean value on the unbounded latent trait and answering a difficult question will still be more likely to supply more positive responses---and those from a population with a positive mean score on the unbounded latent trait and answering an easy question will be more likely to supply more negative responses---if the question's dispersion is greater or attitudes are more polarized in the population.
 
 Given this expected probability $\eta_{ktqr}$, the total number of survey responses at least as positive as $r$ to each question $q$ in country $k$ at time $t$, $y_{ktqr}$, out of the total number of respondents surveyed, $n_{ktqr}$, is then modeled using the beta-binomial distribution, which allows for an overall dispersion parameter, $\phi$, to account for additional sources of survey error [see @McGann2014, 120; @Claassen2019, 4-5].
-
 \begin{equation}
 a_{ktqr} = \phi\eta_{ktqr} \label{eq:bb_a}
 \end{equation}
@@ -206,7 +200,6 @@ y_{ktqr} \sim \textrm{BetaBinomial}(n_{ktqr}, a_{ktqr}, b_{ktqr}) \label{eq:beta
 \end{equation}
 
 Then, to estimate the dynamics of comparative public opinion---the change over time---the prior distributions for the public opinion parameters in Equation \ref{eq:dcpo}, $\bar{\theta'}_{kt}$ and $\sigma_{kt}$, are given by simple local-level dynamic linear  models:
-
 \begin{equation}
 \bar{\theta}_{kt} \sim \textrm{N}(\bar{\theta'}_{k,t-1}, \sigma_{\bar{\theta'}}^2) \label{eq:prior_theta}
 \end{equation}
@@ -226,7 +219,6 @@ It is not surprising, then, that earlier works aggregating public opinion within
 Even if the issue in question is less easily viewed as bounded, bounding is still a good idea because it reduces the uncertainty for the estimates for countries at the extremes, that is, those countries whose values should in fact be easier to estimate.
 As Linzer and Staton [-@Linzer2015, 229] note, "bounding the latent variable may do little harm to the scale and produce more sensible estimates of uncertainty."
 DCPO therefore uses the logistic function to transform the unbounded estimates, $\bar{\theta'}_{kt}$, to the unit interval:
-
 \begin{equation}
 \bar{\theta}_{kt} = \textrm{logit}^{-1}({\bar{\theta'}_{kt}} - 1)
 \end{equation}
@@ -237,7 +229,6 @@ The model is identified by imposing a series of constraints that fix location, d
 The dispersion parameters $\alpha$ are constrained to be positive---and all survey responses are coded to have the same polarity---to fix direction.
 One specified difficulty parameter $\beta$ is set to a value of 1 to identify location, and, as mentioned previously, for each question $q$ the difficulties for increasing response values $r$ are constrained to be increasing.
 To ensure identification, the sum of $\delta_{kq}$ across all countries $k$ is fixed to zero for each question $q$:
-
 \begin{equation}
 \sum_{k = 1}^K \delta_{kq} = 0
 \end{equation}
@@ -282,7 +273,7 @@ Table \ref{tab:comparison_table} summarizes the DCPO model just described in com
 It reveals that DCPO incorporates the desirable features from each of those three models.
 DCPO generates estimates of public opinion that are comparable not only over time but also across countries, takes advantage of all of the information encoded in responses to ordinal questions, explicitly accounts for country-item bias by including terms to capture country-varying question difficulty, provides easily interpreted bounded estimates of mean public opinion, and includes parameters representing the extent to which public opinion is polarized in a country at each point in time.
 
-
+# Relative Performance
 
 ```{r validation}
 load(here::here("data", "validation_table.rda"))
@@ -291,7 +282,7 @@ validation_table
 ```
 
 
-## Conclusions
+# Conclusions
 <!-- strengths: -->
 <!--     makes maximum use of available data -->
 <!-- 	permits testing hypotheses regarding change over time -->
