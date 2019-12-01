@@ -19,6 +19,7 @@ validation_dcpo <- bind_cols(ivt_dcpo, xvt_dcpo) %>%
 load(here::here("data", "claassen_m5_1k_07-15-10-25.rda"))
 ivt_claassen <- DCPOtools::internal_validation_tests(demsup_claassen, claassen_m5, "claassen")
 load(here::here("data", "kfold", "claassen_demsup_kfold.rda"))
+source(here::here("R", "claassen_xvt.R"))
 xvt_claassen <- get_claassen_xvt_results(claassen_demsup_kfold) %>% 
     filter(model == "k-fold mean") %>% 
     transmute(mean_mae = mae,
@@ -70,6 +71,7 @@ validation_table <- bind_rows(validation_claassen, validation_dgirt, validation_
     set_wrap(final(1), everywhere, TRUE) %>% 
     set_bold(final(1), everywhere, FALSE) %>%
     set_background_color(final(1), everywhere, "white") %>% 
-    set_font_size(final(1), everywhere, 8)
+    set_font_size(final(1), everywhere, 8) %>% 
+    set_label("tab:validation_table")
 
 save(validation_table, file = here::here("data", "validation_table.rda"))
