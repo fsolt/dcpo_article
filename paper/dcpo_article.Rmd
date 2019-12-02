@@ -269,11 +269,14 @@ comparison_ht
 
 ```
 
-Table \ref{tab:comparison_table} summarizes the DCPO model just described in comparison to three alternative ways of modeling of public opinion: that presented by @McGann2014, Claassen's [-@Claassen2019] preferred Model 5, and that employed in @Caughey2019.
+Table \ref{tab:comparison_table} summarizes the DCPO model just described in comparison to three alternate ways of modeling public opinion: that presented by @McGann2014, Claassen's [-@Claassen2019] preferred Model 5, and that employed in @Caughey2019.
 It reveals that DCPO incorporates the desirable features from each of those three models.
-DCPO generates estimates of public opinion that are comparable not only over time but also across countries, takes advantage of all of the information encoded in responses to ordinal questions, explicitly accounts for country-item bias by including terms to capture country-varying question difficulty, provides easily interpreted bounded estimates of mean public opinion, and includes parameters representing the extent to which public opinion is polarized in a country at each point in time.
+DCPO generates estimates of public opinion that are comparable not only over time but also across countries, takes advantage of all of the information encoded in responses to ordinal questions, explicitly accounts for country-item bias by including terms to capture country-varying question difficulty, provides easily interpreted bounded estimates of mean public opinion, and includes the standard deviation of public opinion by country-year to represent the extent of polarization.
+The next section provides a demonstration of how these features allow DCPO to provide a better fit to actual data.
 
 # Relative Performance
+
+Table \ref{tab:validation_table} 
 
 ```{r validation}
 load(here::here("data", "validation_table.rda"))
