@@ -51,7 +51,7 @@ validation_table <- bind_rows(validation_claassen, validation_dgirt, validation_
               `\\vtop{\\hbox{\\strut $k$-fold 80\\%}\\hbox{\\strut Credible}\\hbox{\\strut Interval}\\hbox{\\strut Coverage}}` = coverage80ci) %>% 
     as_hux() %>% 
     add_colnames() %>% 
-    rbind(c(NA_character_, "Internal Validation Tests", NA_character_, NA_real_, "External Validation Tests", NA_real_, NA_real_), .) %>% 
+    rbind(c(NA_character_, "Internal Validation Test", NA_character_, NA_real_, "External Validation Test", NA_real_, NA_real_), .) %>% 
     merge_cells(1, 2:4) %>% 
     merge_cells(1, 5:7) %>% 
     set_bold(c(1:2,5), everywhere, TRUE) %>%
