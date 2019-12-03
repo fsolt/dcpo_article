@@ -276,7 +276,16 @@ The next section provides a demonstration of how these features allow DCPO to pr
 
 # Relative Performance
 
-Table \ref{tab:validation_table} 
+
+
+The first three columns of Table \ref{tab:validation_table} present the results of the internal validation test, that is, a test that uses the same data that was used to fit the model [see, e.g., @Claassen2019, 9].
+The mean absolute error (MAE) measures the average difference between the observed proportion of survey respondents in country $k$ in year $t$ with replies to question $q$ with a response at least as positive as response $r$ (or with an affirmative response, in the case of Claassen's [-@Claassen2019] Model 5) and the model's predicted proportion across all countries, years, questions, and response categories.
+Given, however, that Claassen's [-@Claassen2019] Model 5 is fit to dichotomized data, while the @Caughey2019 and DCPO models are fit to the original, possibly ordinal, survey data, which have higher variance, comparing the MAE across all three models can be somewhat misleading.
+Therefore, the MAE of the country means---the average proportions answering affirmatively (for Claassen's [-@Claassen2019] Model 5) or with a response at least as positive as response $r$ (for @Caughey2019 and DCPO) in each country across all years and all questions---serve as a baseline [see @Claassen2019, 11-12].
+The percentage improvement between 
+
+The last three columns present the results of the external validation test. employs k-fold validation with 10 folds, randomly dividing the data into tenths and then sequentially treating each tenth as a test set while fitting the model on a training set consisting of the remaining 90 percent of the data.
+Percent improvement in MAE compares the model's MAE (column 1) and the corresponding country-mean MAE (column 2).
 
 ```{r validation}
 load(here::here("data", "validation_table.rda"))
