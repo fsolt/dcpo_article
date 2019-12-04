@@ -282,16 +282,21 @@ The first three columns of Table \ref{tab:validation_table} present the results 
 The mean absolute error (MAE) measures the average difference between the observed proportion of survey respondents in country $k$ in year $t$ with replies to question $q$ with a response at least as positive as response $r$ (or with an affirmative response, in the case of Claassen's [-@Claassen2019] Model 5) and the model's predicted proportion across all countries, years, questions, and response categories.
 Given, however, that Claassen's [-@Claassen2019] Model 5 is fit to dichotomized data, while the @Caughey2019 and DCPO models are fit to the original, possibly ordinal, survey data, which have higher variance, comparing the MAE across all three models can be somewhat misleading.
 Therefore, the MAE of the country means---the average proportions answering affirmatively (for Claassen's [-@Claassen2019] Model 5) or with a response at least as positive as response $r$ (for @Caughey2019 and DCPO) in each country across all years and all questions---serve as a baseline [see @Claassen2019, 11-12].
-The percentage improvement between 
+The percentage reduction in MAE achieved by each model represents the improvement in fit compared to this baseline.
 
-The last three columns present the results of the external validation test. employs k-fold validation with 10 folds, randomly dividing the data into tenths and then sequentially treating each tenth as a test set while fitting the model on a training set consisting of the remaining 90 percent of the data.
-Percent improvement in MAE compares the model's MAE (column 1) and the corresponding country-mean MAE (column 2).
+Comparing first the results for Claassen's [-@Claassen2019] Model 5 with those for the @Caughey2019 model reveals that, for this set of survey questions, while the former has a smaller MAE, the latter accounts for a larger percentage of the variation in its source data unexplained by the country-means model.
+Again, this discrepancy is possible due to the greater variance in the survey data when its ordinal nature is preserved rather than dichotomized.
+However, the DCPO model provides what is unambiguously the best fit to these data, with the smallest MAE and the largest percentage improvement over the country-means MAE.
 
 ```{r validation}
 load(here::here("data", "validation_table.rda"))
 
 validation_table
 ```
+
+The last three columns present the results of the external validation test. employs k-fold validation with 10 folds, randomly dividing the data into tenths and then sequentially treating each tenth as a test set while fitting the model on a training set consisting of the remaining 90 percent of the data.
+Percent improvement in MAE compares the model's MAE (column 1) and the corresponding country-mean MAE (column 2).
+
 
 
 # Conclusions
