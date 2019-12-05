@@ -294,8 +294,9 @@ load(here::here("data", "validation_table.rda"))
 validation_table
 ```
 
-The last three columns present the results of the external validation test. employs k-fold validation with 10 folds, randomly dividing the data into tenths and then sequentially treating each tenth as a test set while fitting the model on a training set consisting of the remaining 90 percent of the data.
-Percent improvement in MAE compares the model's MAE (column 1) and the corresponding country-mean MAE (column 2).
+The last three columns of Table \ref{tab:validation_table} present the results of an external validation test, a test of the models' ability to predict out-of-sample survey responses. 
+This test employs $k$-fold validation with 10 folds, that is, it randomly divides the available data into tenths and then sequentially treats each tenth as a test set to be predicted while fitting the model on a training set consisting of the other nine tenths of the data.
+The fourth column shows the mean of the MAEs of the ten sets of out-of-sample predictions, the fifth presents the mean improvement over of these ten MAEs over their respective ten country-mean MAEs, and the sixth reports the discrepancy between the percentage of all response proportions that fall with their corresponding predictions' 80% confidence intervals and the expected 80%.
 
 
 
