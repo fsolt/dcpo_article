@@ -2,7 +2,12 @@ library(tidyverse)
 
 
 demsup <- read_csv("https://github.com/fsolt/DCPOtools/raw/master/inst/extdata/all_data_demsupport.csv")
-dcpo_data <- demsup %>% DCPOtools::with_min_yrs(3)
+dcpo_data <- demsup %>% 
+    DCPOtools::with_min_yrs(3) %>% 
+    group_by(country, year, item) %>% 
+    mutate(samp_prop = n/sum(n)) %>% 
+    ungroup()
+
 set.seed(324)
 
 n_tkqr <- reshape2::acast(dcpo_data,
@@ -28,12 +33,15 @@ dgirt_demsup_kfold <- purrr::map_df(7:8, function(x) {
                country = attr(n_tkqr, "dimnames")[2][[1]][country_code],
                year_code = str_replace(par, "PI\\[(\\d+),\\d+,\\d+,\\d+\\]", "\\1") %>%
                    as.numeric(),
-               year = attr(n_tkqr, "dimnames")[1][[1]][year_code],
+               year = attr(n_tkqr, "dimnames")[1][[1]][year_code] %>% 
+                   as.numeric(),
                item_code = str_replace(par, "PI\\[\\d+,\\d+,(\\d+),\\d+\\]", "\\1") %>%
                    as.numeric(),
                item = attr(n_tkqr, "dimnames")[3][[1]][item_code],
                r = str_replace(par, "PI\\[\\d+,\\d+,\\d+,(\\d+)\\]", "\\1") %>%
-                   as.numeric())
+                   as.numeric()) %>% 
+        left_join(dcpo_data %>% select(country, year, item, r, samp_prop), by = c("country", "year", "item", "r")) %>% 
+        arrange(country_code, year, item_code, r)
     return(df)
 })
 
