@@ -162,9 +162,12 @@ c_xvt <- function(claassen_xvt_output = claassen_xvt_output, ci = ci) {
     dplyr::last() %>%
     dplyr::filter(test == 0) %>%
     dplyr::group_by(country) %>%
-    dplyr::mutate(country_mean = mean(x/samp)) %>%
-    dplyr::ungroup()
-  country_mean_mae <- mean(abs((country_mean$x/country_mean$samp - country_mean$country_mean))) %>%
+    dplyr::summarize(country_mean = mean(x/samp))
+  
+  cmmae_test <- test_data %>%
+    left_join(country_mean, by = "country")
+  
+  country_mean_mae <- mean(abs((cmmae_test$x/cmmae_test$samp - cmmae_test$country_mean))) %>%
     round(3)
 
   improv_vs_cmmae <- round((country_mean_mae - model_mae)/country_mean_mae * 100, 1)
