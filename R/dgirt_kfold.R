@@ -26,22 +26,28 @@ format_dgirt_kfold <- function(dcpo_data,
                                fold_seed = 324) {
     set.seed(fold_seed)
     
+    dat <- dcpo_data %>%
+        group_by(country, year, item) %>%
+        mutate(fold = runif(min = 1, max = number_of_folds, n = 1) %>%
+                   round()) %>%
+        ungroup() %>%
+        mutate(test = as.numeric(fold == fold_number),
+               n = if_else(test==1, 0, n))
+    
     n_tkqr <- reshape2::acast(dcpo_data,
+                             year ~ country ~ item ~ r,
+                             fun.aggregate = sum,
+                             value.var = "n",
+                             drop = FALSE)
+    
+    n_tkqr_train <- reshape2::acast(dat,
                               year ~ country ~ item ~ r,
                               fun.aggregate = sum,
                               value.var = "n",
                               drop = FALSE)
-    
-    folds_tkqr <- runif(min = 1, max = number_of_folds, 
-                       n = length(which(!n_tkqr==0))) %>% 
-        round()
-    
-    n_tkqr_train <- n_tkqr
-    n_tkqr_train[which(!n_tkqr==0)][folds_tkqr==fold_number] <- 0
-    
-    n_tkqr_test <- n_tkqr
-    n_tkqr_test[which(!n_tkqr==0)][!folds_tkqr==fold_number] <- 0
-    test_pars <- paste0("PI[", apply(which(!n_tkqr_test==0, arr.ind = T), 1, paste, collapse = ","), "]")
+
+    n_tkqr_test <- setdiff(which(n_tkqr_train==0), which(n_tkqr==0))
+    test_pars <- paste0("PI[", apply(arrayInd(n_tkqr_test, dim(n_tkqr), dimnames(n_tkqr)), 1, paste, collapse = ","), "]")
     
     unused_cp <- as.data.frame(apply(n_tkqr_train, c(3, 4), sum)) %>%
         tibble::rownames_to_column() %>%
@@ -54,19 +60,19 @@ format_dgirt_kfold <- function(dcpo_data,
                       time = "year",
                       geo = "country",
                       demo = "country",
-                      stan_data = list( G          = dplyr::n_distinct(dcpo_data$country),
-                                        T          = max(dcpo_data$year) - min(dcpo_data$year) + 1,
-                                        Q          = dplyr::n_distinct(dcpo_data$item),
-                                        K          = max(dcpo_data$r),
+                      stan_data = list( G          = dim(n_tkqr_train)[2],
+                                        T          = dim(n_tkqr_train)[1],
+                                        Q          = dim(n_tkqr_train)[3],
+                                        K          = dim(n_tkqr_train)[4],
                                         D          = 1,
                                         SSSS       = n_tkqr_train,
                                         beta_sign  = matrix(1, dplyr::n_distinct(dcpo_data$item), 1),
                                         unused_cut = unused_cp,
-                                        N_nonzero  = sum(n_tkqr != 0),
+                                        N_nonzero  = sum(n_tkqr_train != 0),
                                         data       = dcpo_data)
     )
     
-    dgirt <- list(train = dgirt_stan, test = n_tkqr_test)
+    dgirt <- list(train = dgirt_stan, test = test_pars)
     
     return(dgirt)
 }
@@ -77,14 +83,16 @@ demsup_data$train@stan_data$evolving_alpha = as.integer(FALSE)
 
 out1 <- stan(file = 'dgirt.stan',
              data = demsup_data$train@stan_data,
-             iter = 10,
+             iter = 300,
              thin = 2,
              chains= 4,
              cores = 4,
-             pars = test_pars,
+             pars = "PI",
              control = list(adapt_delta = 0.99, stepsize = 0.001, max_treedepth = 14))
 
-save(out1, 
+out_test <- rstan::extract(out1, pars = demsup_data$test)
+
+save(out_test, 
      file = str_c("data/fold_", 
                   fold,
                   ".rda"))
