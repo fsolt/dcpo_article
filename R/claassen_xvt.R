@@ -157,7 +157,10 @@ c_xvt <- function(claassen_xvt_output = claassen_xvt_output, ci = ci) {
   model_mae <- mean(abs(test_data$x/test_data$samp - (colMeans(x_test_all)/test_data$samp))) %>%
     round(3)
 
-  country_mean <- test_data %>%
+  country_mean <- claassen_xvt_output %>%
+    dplyr::first() %>%
+    dplyr::last() %>%
+    dplyr::filter(test == 0) %>%
     dplyr::group_by(country) %>%
     dplyr::mutate(country_mean = mean(x/samp)) %>%
     dplyr::ungroup()
