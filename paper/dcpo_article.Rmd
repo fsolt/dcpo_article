@@ -275,7 +275,7 @@ DCPO generates estimates of public opinion that are comparable not only over tim
 The next section provides a demonstration of how these features allow DCPO to provide a better fit to actual data.
 
 # Relative Performance
-To assess the ability of DCPO to fit public opinion data relative to alternative approaches, I use the set of survey questions on support for democracy identified in @Claassen2019.
+To assess the ability of DCPO to fit public opinion data relative to alternative approaches, I use the set of survey questions on support for democracy employed in @Claassen2019 [, 7-8].
 
 
 The first three columns of Table \ref{tab:validation_table} present the results of the internal validation test, that is, a test that uses the same data that was used to fit the model [see, e.g., @Claassen2019, 9].
