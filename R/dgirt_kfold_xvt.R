@@ -54,7 +54,7 @@ dgirt_demsup_kfold <- purrr::map_df(1:10, function(x) {
         left_join(dcpo_data %>% select(country, year, item, r, samp_prop), by = c("country", "year", "item", "r")) %>% 
         arrange(country_code, year, item_code, r) %>% 
         mutate(abs_error = abs(mean_pred - samp_prop),
-               in_80ci = mean_pred >= lb & mean_pred <= ub)
+               in_80ci = samp_prop >= lb & samp_prop <= ub)
     
     country_mean <- dat %>%
         dplyr::filter(test == 0) %>%
