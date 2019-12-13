@@ -38,7 +38,7 @@ ivt_dgirt <- DCPOtools::internal_validation_tests(demsup_data, out1, "dgirt")
 load(here::here("data", "kfold", "dgirt", "dgirt_demsup_kfold.rda"))
 
 validation_dgirt <- bind_cols(ivt_dgirt, xvt_dgirt) %>% 
-    mutate(model = "\\vtop{\\hbox{\\strut Caughey, O'Grady,}\\hbox{\\strut  and Warshaw (2019)}}")
+    mutate(model = "\\vtop{\\hbox{\\strut Caughey, O'Grady,}\\hbox{\\strut and Warshaw (2019)}}")
 
 # Make the table
 validation_table <- bind_rows(validation_claassen, validation_dgirt, validation_dcpo) %>% 
