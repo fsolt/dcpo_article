@@ -2,7 +2,7 @@
 library(huxtable)
 library(tidyverse)
 
-load(here::here("data", "church_21_2k_10-27-17-20.rda"))
+load(here::here("data", "church_21_2k_12-13-00-03.rda"))
 ivt_dcpo <- DCPOtools::internal_validation_tests(demsup_data, out1)
 load(here::here("data", "kfold", "dcpo_demsup_kfold.rda"))
 xvt_dcpo <- DCPO::get_xvt_results(dcpo_demsup_kfold) %>% 
@@ -16,7 +16,7 @@ validation_dcpo <- bind_cols(ivt_dcpo, xvt_dcpo) %>%
 
 
 # Claassen
-load(here::here("data", "claassen_m5_1k_07-15-10-25.rda"))
+load(here::here("data", "claassen_m5_2k_12-12-16-03.rda"))
 ivt_claassen <- DCPOtools::internal_validation_tests(demsup_claassen, claassen_m5, "claassen")
 load(here::here("data", "kfold", "claassen_demsup_kfold.rda"))
 xvt_claassen <- get_claassen_xvt_results(claassen_demsup_kfold) %>% 
