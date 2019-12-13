@@ -42,8 +42,9 @@ validation_dgirt <- bind_cols(ivt_dgirt, xvt_dgirt) %>%
 
 # Make the table
 validation_table <- bind_rows(validation_claassen, validation_dgirt, validation_dcpo) %>% 
-    mutate(coverage80ci = if_else(coverage80ci > 80, paste0("+", sprintf("%2.1f", coverage80ci - 80)), sprintf("%2.1f", coverage80ci - 80)),
-           mean_improv_over_cmmae = sprintf("%2.1f", mean_improv_over_cmmae)) %>% 
+    mutate(mean_mae = sprintf("%.3f", mean_mae),
+           mean_improv_over_cmmae = sprintf("%2.1f", mean_improv_over_cmmae),
+           coverage80ci = if_else(coverage80ci > 80, paste0("+", sprintf("%2.1f", coverage80ci - 80)), sprintf("%2.1f", coverage80ci - 80))) %>% 
     transmute(`\\vtop{\\hbox{\\strut }\\hbox{\\strut }\\hbox{\\strut }\\hbox{\\strut Model}}` = model,
               `\\vtop{\\hbox{\\strut Mean}\\hbox{\\strut Absolute}\\hbox{\\strut Error}\\hbox{\\strut (MAE)}}` = mae,
               `\\vtop{\\hbox{\\strut }\\hbox{\\strut Country-}\\hbox{\\strut Means}\\hbox{\\strut MAE}}` = sprintf("%.3f", cmmae),
@@ -53,19 +54,20 @@ validation_table <- bind_rows(validation_claassen, validation_dgirt, validation_
               `\\vtop{\\hbox{\\strut $k$-fold 80\\%}\\hbox{\\strut Credible}\\hbox{\\strut Interval}\\hbox{\\strut Coverage}}` = coverage80ci) %>% 
     as_hux() %>% 
     add_colnames() %>% 
+    rbind(c(NA_character_, "(1)", "(2)", "(3)", "(4)", "(5)", "(6)"), .) %>% 
     rbind(c(NA_character_, "Internal Validation Test", NA_character_, NA_real_, "External Validation Test", NA_real_, NA_real_), .) %>% 
     merge_cells(1, 2:4) %>% 
     merge_cells(1, 5:7) %>% 
-    set_bold(c(1:2,5), everywhere, TRUE) %>%
+    set_bold(c(1:3, 6), everywhere, TRUE) %>%
     set_top_border(1, everywhere, 1) %>%
-    set_bottom_border(1:2, everywhere, 1) %>%
+    set_bottom_border(c(1, 3), everywhere, 1) %>%
     set_bottom_border(final(1), everywhere, 1) %>% 
     set_caption('Internal and External Validation Tests') %>%
     set_position("left") %>%
-    set_escape_contents(2, everywhere, FALSE) %>%
-    set_escape_contents(3:4, 1, FALSE) %>%
-    set_background_color(odds, everywhere, "grey95") %>%
-    set_background_color(1, everywhere, "white") %>%
+    set_escape_contents(3, everywhere, FALSE) %>%
+    set_escape_contents(4:5, 1, FALSE) %>%
+    set_background_color(evens, everywhere, "grey95") %>%
+    set_background_color(2, everywhere, "white") %>%
     set_align("center") %>% 
     set_align(everywhere, 1, "left") %>% 
     add_rows(c("The internal validation test uses the same data for model fitting and validation; the external validation test employs k-fold validation with 10 folds, randomly dividing the data into tenths and then sequentially treating each tenth as a test set while fitting the model on a training set consisting of the remaining 90 percent of the data.  Percent improvement in MAE compares the model's MAE (column 1) and the corresponding country-mean MAE (column 2).", rep(NA_real_, 6))) %>% 
