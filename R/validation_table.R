@@ -30,7 +30,7 @@ validation_claassen <- bind_cols(ivt_claassen, xvt_claassen) %>%
 
 
 # DGIRT
-load(here::here("data","dgirt", "demsup_dgirt_50_11-10-09-47.rda"))
+load(here::here("data","dgirt", "demsup_dgirt_50_12-15-03-44.rda"))
 demsup <- read_csv("https://github.com/fsolt/DCPOtools/raw/master/inst/extdata/all_data_demsupport.csv")
 demsup_data <- DCPOtools::format_dgirt(demsup %>% DCPOtools::with_min_yrs(3))
 ivt_dgirt <- DCPOtools::internal_validation_tests(demsup_data, out1, "dgirt")
