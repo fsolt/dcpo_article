@@ -54,6 +54,7 @@ validation_table <- bind_rows(validation_claassen, validation_dgirt, validation_
               `\\vtop{\\hbox{\\strut $k$-fold 80\\%}\\hbox{\\strut Credible}\\hbox{\\strut Interval}\\hbox{\\strut Coverage}}` = coverage80ci) %>% 
     as_hux() %>% 
     add_colnames() %>% 
+    set_width(.8) %>% 
     rbind(c(NA_character_, "(1)", "(2)", "(3)", "(4)", "(5)", "(6)"), .) %>% 
     rbind(c(NA_character_, "Internal Validation Test", NA_character_, NA_real_, "External Validation Test", NA_real_, NA_real_), .) %>% 
     merge_cells(1, 2:4) %>% 
@@ -62,7 +63,7 @@ validation_table <- bind_rows(validation_claassen, validation_dgirt, validation_
     set_top_border(1, everywhere, 1) %>%
     set_bottom_border(c(1, 3), everywhere, 1) %>%
     set_bottom_border(final(1), everywhere, 1) %>% 
-    set_caption('Internal and External Validation Tests') %>%
+    set_caption("Internal and External Validation Tests") %>%
     set_position("left") %>%
     set_escape_contents(3, everywhere, FALSE) %>%
     set_escape_contents(4:5, 1, FALSE) %>%
@@ -70,12 +71,12 @@ validation_table <- bind_rows(validation_claassen, validation_dgirt, validation_
     set_background_color(2, everywhere, "white") %>%
     set_align("center") %>% 
     set_align(everywhere, 1, "left") %>% 
-    add_rows(c("The internal validation test uses the same data for model fitting and validation; the external validation test employs k-fold validation with 10 folds, randomly dividing the data into tenths and then sequentially treating each tenth as a test set while fitting the model on a training set consisting of the remaining 90 percent of the data.  Percent improvement in MAE (3) compares the model's MAE (1) and the corresponding country-mean MAE (2).", rep(NA_real_, 6))) %>% 
-    merge_cells(final(1), 1:7) %>% 
-    set_wrap(final(1), everywhere, TRUE) %>% 
+    add_rows(c("The internal validation test uses the same data for model fitting and validation; the external validation test employs k-fold validation with 10 folds, randomly dividing the data into tenths and then sequentially treating each tenth as a test set while fitting the model on a training set consisting of the remaining 90 percent of the data.  Percent improvement in MAE (column 3) compares the model's MAE (column 1) and the corresponding country-means MAE (column 2).", rep(NA_real_, 6))) %>%
     set_bold(final(1), everywhere, FALSE) %>%
-    set_background_color(final(1), everywhere, "white") %>% 
-    set_font_size(final(1), everywhere, 8) %>% 
+    merge_cells(final(1), everywhere) %>%
+    set_wrap(final(1), everywhere, TRUE) %>%
+    set_background_color(final(1), everywhere, "white") %>%
+    set_font_size(final(1), everywhere, 9) %>%
     set_label("tab:validation_table")
 
 save(validation_table, file = here::here("data", "validation_table.rda"))
