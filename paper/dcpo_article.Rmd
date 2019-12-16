@@ -2,7 +2,7 @@
 output: 
   pdf_document:
     citation_package: natbib
-    keep_tex: false
+    keep_tex: true
     fig_caption: true
     latex_engine: pdflatex
     template: svm-latex-ms2.tex
@@ -279,14 +279,16 @@ To assess the ability of DCPO to fit public opinion data relative to alternative
 
 
 The first three columns of Table \ref{tab:validation_table} present the results of the internal validation test, that is, a test that uses the same data that was used to fit the model [see, e.g., @Claassen2019, 9].
-The mean absolute error (MAE) measures the average difference between the observed proportion of survey respondents in country $k$ in year $t$ with replies to question $q$ with a response at least as positive as response $r$ (or with an affirmative response, in the case of Claassen's [-@Claassen2019] Model 5) and the model's predicted proportion across all countries, years, questions, and response categories.
+In column 1, the mean absolute error (MAE) measures the average difference between the observed proportion of survey respondents in country $k$ in year $t$ with replies to question $q$ with a response at least as positive as response $r$ (or with an affirmative response, in the case of Claassen's [-@Claassen2019] Model 5) and the model's predicted proportion across all countries, years, questions, and response categories.
 Given, however, that Claassen's [-@Claassen2019] Model 5 is fit to dichotomized data, while the @Caughey2019 and DCPO models are fit to the original, possibly ordinal, survey data, which have higher variance, comparing the MAE across all three models can be somewhat misleading.
-Therefore, the MAE of the country means---the average proportions answering affirmatively (for Claassen's [-@Claassen2019] Model 5) or with a response at least as positive as response $r$ (for @Caughey2019 and DCPO) in each country across all years and all questions---serve as a baseline [see @Claassen2019, 11-12].
-The percentage reduction in MAE achieved by each model represents the improvement in fit compared to this baseline.
+Therefore, the MAE of the country means---the average proportions answering affirmatively (for Claassen's [-@Claassen2019] Model 5) or with a response at least as positive as response $r$ (for @Caughey2019 and DCPO) in each country across all years and all questions---serve as a baseline [see @Claassen2019, 11-12]; these appear in column 2.
+The percentage reduction in MAE achieved by each model, listed in column 3, represents the improvement in fit compared to this baseline.
 
-The last three columns of Table \ref{tab:validation_table} present the results of an external validation test, a test of the models' ability to predict out-of-sample survey responses. 
+The last three columns of Table \ref{tab:validation_table} present the results of an external validation test, a test of the models' ability to predict out-of-sample survey responses.
 This test employs $k$-fold validation with 10 folds, that is, it randomly divides the available country-year-questions into tenths and then sequentially treats each tenth as a test set to be predicted while fitting the model on a training set consisting of the other nine tenths of the data.
-The fourth column shows the mean of the MAEs of the ten sets of out-of-sample predictions, the fifth presents the mean improvement over of these ten MAEs over their respective ten country-mean MAEs, and the sixth reports the discrepancy between the percentage of all response proportions that fall within their corresponding predictions' 80% confidence intervals and the expected 80%.
+Column 4 shows the mean of the MAEs of the ten resulting sets of out-of-sample predictions, while column 5 presents the mean improvement over of these ten MAEs over their respective ten country-mean MAEs.
+Column 6 reports the discrepancy between the percentage of all response proportions that fall within their corresponding predictions' 80% confidence intervals and the expected 80%; it therefore provides a gauge of the accuracy of the models' estimates of uncertainty.
+A negative value in this column indicate that less than 80% of the observed out-of-sample survey proportions are included with the model's predictions' nominal 80% credible intervals, and so its uncertainty estimates are overconfident, while a positive value indicates the opposite, that more than 80% of the observed proportions fall within the credible intervals and so the model's uncertainty estimates are overly conservative.
 
 ```{r validation}
 load(here::here("data", "validation_table.rda"))
@@ -294,9 +296,25 @@ load(here::here("data", "validation_table.rda"))
 validation_table
 ```
 
-Comparing first the results for Claassen's [-@Claassen2019] Model 5 with those for the @Caughey2019 model reveals that, for this set of survey questions, while the former has a smaller MAE, the latter accounts for a larger percentage of the variation in its source data unexplained by the country-means model.
-Again, this discrepancy is possible due to the greater variance in the survey data when its ordinal nature is preserved rather than dichotomized.
-However, the DCPO model provides what is unambiguously the best fit to these data, with the smallest MAE and the largest percentage improvement over the country-means MAE.
+Comparing first the results for Claassen's [-@Claassen2019] Model 5 with those for the @Caughey2019 model reveals that, at least for this set of survey questions, while the former has a smaller MAE, the latter accounts for a larger percentage of the variation in its source data left unexplained by its respective country-means model.
+This is true both in the internal validation test and on average across the ten folds of the external validation test.
+Again, this discrepancy is possible due to the greater variance in the survey data when its ordinal nature is preserved, as in the @Caughey2019 model, rather than dichotomized, as in Claassen's [-@Claassen2019] Model 5.
+An examination of column 6 reveals that the @Caughey2019 model yielded predictions with credible intervals that are much too narrow, encompassing only about 13% of the actual observations, while those for Claassen's [-@Claassen2019] Model 5 were slightly too conservative.^[
+The relatively poor uncertainty estimates of the @Caughey2019 model are similar to those found for the dichotomous version presented in @Caughey2015 by @Claassen2019 [, 12].]
+
+However, it is the DCPO model that provides what is unambiguously the best fit.
+It features the smallest mean absolute error: on average, in the internal validation test its predictions are just over 3 percentage points away from the actual sample observations, and in the external validation test they are 5.5 percentage points away from the actual out-of-sample observations.
+In both cases, these represent the largest percentage improvement over the country-means MAE.
+Further, in the external validation test, the DCPO credible intervals come closest to matching the nominal 80% level of any of the three models.
+
+
+```{r}
+# dem <- read_csv("data/Support_DemStock_05_15.csv") %>%
+#   mutate(country = countrycode::countrycode(ISO_code, "iso3c", "country.name")) %>%
+#   left_join
+
+
+```
 
 # Conclusions
 <!-- strengths: -->
