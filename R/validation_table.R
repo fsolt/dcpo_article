@@ -35,7 +35,7 @@ demsup <- read_csv("https://github.com/fsolt/DCPOtools/raw/master/inst/extdata/a
 demsup_data <- DCPOtools::format_dgirt(demsup %>% DCPOtools::with_min_yrs(3))
 ivt_dgirt <- DCPOtools::internal_validation_tests(demsup_data, out1, "dgirt")
 
-load(here::here("data", "kfold", "dgirt", "dgirt_demsup_kfold.rda"))
+load(here::here("data", "kfold", "dgirt", "dgirt_demsup_kfold.rda")) # via R/dgirt_kfold_xvt.R
 
 validation_dgirt <- bind_cols(ivt_dgirt, xvt_dgirt) %>% 
     mutate(model = "\\vtop{\\hbox{\\strut Caughey, O'Grady,}\\hbox{\\strut and Warshaw (2019)}}")
