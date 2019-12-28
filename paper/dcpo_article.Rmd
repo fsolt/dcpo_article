@@ -54,7 +54,7 @@ The most challenging of these obstacles is that, across countries and over time,
 
 As a result, the most common approach to the study of comparative public opinion is to use a single cross-section, typically provided by a single cross-national survey [see, e.g., @Ansell2014; @Clayton2019].
 Some works have captured some element of change over time by taking advantage of multiple waves of an ongoing cross-national survey [see, e.g., @Adams2016; @Abou-Chadi2019] or, less commonly, drawing on multiple surveys that employed the same items [see, e.g., @Ezrow2014; @Dalton2017].
-Only very rarely is there an relevent item that has been frequently asked in many countries [but see, taking advantage of the Eurobarometer's longstanding question on European integration, @Hagemann2016].
+Only very rarely are scholars able to capitalize on a relevant item that has been frequently asked by the same survey in many countries: see, for example, how @Norris2011 [, 70-77] took advantage of the Eurobarometer's longstanding questions on trust in government, and @Hagemann2017 that program's equally longstanding item on European integration. 
 
 <!-- A growing body of work is taking a different tack, examining the dynamics of public opinion in single countries over time.  These studies draw on -->
 
@@ -65,14 +65,12 @@ Only very rarely is there an relevent item that has been frequently asked in man
 <!-- @Hobolt2008  -->
 <!-- Stubager2015) -->
 
-<!-- dynamic comparative: Hagemann2016 -->
 <!-- Carlin2019: single-cross section of Latinobarometer, plus Stimson of presidential approval for 17 countries -->
 
 <!-- field of comparative public opinion -->
 <!-- lack of dynamics (in contrast to public opinion work in U.S.) -->
 <!-- Check out -->
 <!-- 	Thomassen2011 -->
-<!-- 	Norris on trust (2011, 63-77) -->
 
 
 <!-- problem: 	scarce data -->
@@ -257,6 +255,7 @@ comparison_data <- tibble::tribble(
 comparison_ht <- comparison_data %>%
   as_hux() %>% 
   add_colnames() %>% 
+  set_width(.6) %>%
   set_bold(1, 1:5, TRUE) %>% 
   set_bold(everywhere, final(1), TRUE) %>% 
   set_top_border(1, everywhere, 1) %>%
@@ -315,7 +314,7 @@ Further, in the external validation test, the DCPO credible intervals come close
 # Usage
 
 ## Uncertainty
-Since ci can be large, need to take into uncertainty into account---don't use means only.  Follow example of work using other latent variables [@Crabtree2015] and other measures incorporating uncertainty, like the SWIID [@Solt2019].  Check @OGrady2019 (no?), @Claassen2019a (no), @Claassen2020 (no).
+Since ci can be large, need to take into uncertainty into account---don't use means only.  Follow example of work using other latent variables [@Crabtree2015] and other measures incorporating uncertainty, like the SWIID [@Solt2020].  Check @OGrady2019 (no?), @Claassen2019b (no), @Claassen2020 (no).
 
 ## Collecting Data
 
