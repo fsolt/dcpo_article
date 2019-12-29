@@ -52,18 +52,19 @@ library(latex2exp)
 A wealth of surveys provide information on the state of public opinion on various issues in different countries over the years, but scholars have faced significant hurdles to putting all of this information to use in any comparative study.
 The most challenging of these obstacles is that, across countries and over time, the questions asked regarding any given issue are rarely the same, making responses to these questions incomparable.
 
-As a result, the most common approach to the study of comparative public opinion is to use a single cross-section, typically provided by a single cross-national survey [see, e.g., @Ansell2014; @Clayton2019].
-Some works have captured some element of change over time by taking advantage of multiple waves of an ongoing cross-national survey [see, e.g., @Adams2016; @Abou-Chadi2019] or, less commonly, drawing on multiple surveys that employed the same items [see, e.g., @Ezrow2014; @Dalton2017].
-Only very rarely are scholars able to capitalize on a relevant item that has been frequently asked by the same survey in many countries: see, for example, how @Norris2011 [, 70-77] took advantage of the Eurobarometer's longstanding questions on trust in government, and @Hagemann2017 that program's equally longstanding item on European integration. 
+Only very rarely are scholars able to capitalize on a relevant item that has been frequently asked by the same survey in many countries, such as how @Norris2011 [, 70-77] took advantage of the Eurobarometer's longstanding questions on trust in government, and @Hagemann2017 that program's equally longstanding item on whether European integration is a "good thing." 
+Some works capture an element of change over time by taking advantage of multiple waves of an ongoing cross-national survey [see, e.g., @Adams2016; @Abou-Chadi2019] or, occasionally, by drawing on multiple surveys that employed the same items [see, e.g., @Ezrow2014; @Dalton2017].
+But the difficulty of surmounting the obstacle of scarce and incomparable data often leaves researchers examining only a single cross-section of countries [see, e.g., @Ansell2014; @Clayton2019].
 
 <!-- A growing body of work is taking a different tack, examining the dynamics of public opinion in single countries over time.  These studies draw on -->
 
-
-
-
 <!-- (Not using stimson:  -->
-<!-- @Hobolt2008  -->
-<!-- Stubager2015) -->
+<!-- @Hobolt2008 (3 country) -->
+<!-- Stubager2015 (one country)) -->
+
+@Stimson1991; @Stimson2018
+
+Multicountry Stimson: @Guinaudeau2019; @Carlin2018
 
 <!-- Carlin2019: single-cross section of Latinobarometer, plus Stimson of presidential approval for 17 countries -->
 
@@ -72,20 +73,21 @@ Only very rarely are scholars able to capitalize on a relevant item that has bee
 <!-- Check out -->
 <!-- 	Thomassen2011 -->
 
-
 <!-- problem: 	scarce data -->
 <!-- 		perennial problem of public opinion research: exact question wanted is rarely asked -->
 <!-- 		no (good) way to (fully) integrate what does exist -->
 
 <!-- question of feedback: positive or negative? ("policies create constituencies" vs. thermostatic) under what conditions? -->
 
+Latent variable models have become a very useful tool for combining the information available in disparate sources into cross-nationally comparable time series. 
+They have been used to measure many difficult concepts in comparative politics, from democracy [@Treier2008; @Pemstein2010] through governance [@Arel-Bundock2011] and state capacity [@Hanson2019] to judicial independence [@Linzer2015] and respect for human rights [@Fariss2014].
 
 
-<!-- (Treier and Jackman 2008; Pemstein, Meserve, and Melton 2010, [Arel-Bundock and Mebane 2011])  -->
+
 
 # Estimating Dynamic Comparative Public Opinion
 
-The logic underlying DCPO's approach to estimating dynamic comparative public opinion starts at the individual level with the two-parameter logistic (or "2PL") IRT model.  In this model, the probability that individual $i$ responds affirmatively to a dichotomous question $q$ is a function of the individual's score on the unbounded latent trait, $\theta'_{i}$, plus two parameters that characterize the question, its *difficulty*, $\beta_{q}$, and its *dispersion*, $\alpha_{q}$:
+The logic underlying DCPO's approach to estimating dynamic comparative public opinion starts at the individual level with the two-parameter logistic item response theory ("2PL IRT") model.  In this model, the probability that individual $i$ responds affirmatively to a dichotomous question $q$ is a function of the individual's score on the unbounded latent trait, $\theta'_{i}$, plus two parameters that characterize the question, its *difficulty*, $\beta_{q}$, and its *dispersion*, $\alpha_{q}$:
 \begin{equation}
 \textrm{Pr}(y_{iq} = 1) = \textrm{logit}^{-1}(\frac{\theta'_{i} - \beta_{q}}{\alpha_{q}}) \label{eq:irt}
 \end{equation}
@@ -240,7 +242,7 @@ The dispersion parameters $\alpha_{q}$ are drawn from standard half-normal prior
 The first difficulty parameters for each question, $\beta_{q1}$, are drawn from standard normal prior distributions, and the differences between $\beta$s for each $r$ for the same question $q$ are drawn from standard half-normal prior distributions.
 The item-bias parameters $\delta_{kq}$ receive normally-distributed hierarchical priors with mean 0 and standard deviations drawn from standard half-normal prior distributions.
 The initial value of the mean unbounded latent trait for each country, $\bar{\theta'}_{k1}$, is assigned a standard normal prior, as are the transition variances $\sigma_{\bar{\theta'}}^2$ and $\sigma_{\sigma}^2$; the initial value of the standard deviation of the unbounded latent trait for each country, $\sigma_{k1}$, is drawn from a standard lognormal prior distribution.
-The overall dispersion, $\phi$, receives a more informative prior drawn from a gamma(4, 0.1) distribution that yields values that are well scaled for that parameter.
+The overall dispersion, $\phi$, receives a somewhat more informative prior drawn from a gamma(4, 0.1) distribution that yields values that are well scaled for that parameter.
 
 ```{r comparison_table}
 comparison_data <- tibble::tribble(
@@ -280,7 +282,6 @@ The next section provides a demonstration of how these features allow DCPO to pr
 # Relative Performance
 To assess the ability of DCPO to fit public opinion data relative to alternative approaches, I use the set of survey questions on support for democracy employed in @Claassen2019 [, 7-8].
 
-
 The first three columns of Table \ref{tab:validation_table} present the results of the internal validation test, that is, a test that uses the same data that was used to fit the model [see, e.g., @Claassen2019, 9].
 In column 1, the mean absolute error (MAE) measures the average difference between the observed proportion of survey respondents in country $k$ in year $t$ with replies to question $q$ with a response at least as positive as response $r$ (or with an affirmative response, in the case of Claassen's [-@Claassen2019] Model 5) and the model's predicted proportion across all countries, years, questions, and response categories.
 Given, however, that Claassen's [-@Claassen2019] Model 5 is fit to dichotomized data, while the @Caughey2019 and DCPO models are fit to the original, possibly ordinal, survey data, which have higher variance, comparing the MAE across all three models can be somewhat misleading.
@@ -314,7 +315,11 @@ Further, in the external validation test, the DCPO credible intervals come close
 # Usage
 
 ## Uncertainty
-Since ci can be large, need to take into uncertainty into account---don't use means only.  Follow example of work using other latent variables [@Crabtree2015] and other measures incorporating uncertainty, like the SWIID [@Solt2020].  Check @OGrady2019 (no?), @Claassen2019b (no), @Claassen2020 (no).
+Since ci can be large, need to take into uncertainty into account---don't use means only.  
+Follow example of work using other latent variables [@Crabtree2015] and other measures incorporating uncertainty, like the SWIID [@Solt2020].  
+Existing work: @OGrady2019 (doesn't look like it, but confirm)
+@Claassen2020a (no)
+@Claassen2020b (no).
 
 ## Collecting Data
 
