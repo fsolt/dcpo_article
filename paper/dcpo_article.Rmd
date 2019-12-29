@@ -52,9 +52,9 @@ library(latex2exp)
 A wealth of surveys provide information on the state of public opinion on various issues in different countries over the years, but scholars have faced significant hurdles to putting all of this information to use in any comparative study.
 The most challenging of these obstacles is that, across countries and over time, the questions asked regarding any given issue are rarely the same, making responses to these questions incomparable.
 
-Only very rarely are scholars able to capitalize on a relevant item that has been frequently asked by the same survey in many countries, such as how @Norris2011 [, 70-77] took advantage of the Eurobarometer's longstanding questions on trust in government, and @Hagemann2017 that program's equally longstanding item on whether European integration is a "good thing." 
-Some works capture an element of change over time by taking advantage of multiple waves of an ongoing cross-national survey [see, e.g., @Adams2016; @Abou-Chadi2019] or, occasionally, by drawing on multiple surveys that employed the same items [see, e.g., @Ezrow2014; @Dalton2017].
-But the difficulty of surmounting the obstacle of scarce and incomparable data often leaves researchers examining only a single cross-section of countries [see, e.g., @Ansell2014; @Clayton2019].
+As a result, the most common approach to the study of comparative public opinion is to use a single cross-section, typically provided by a single cross-national survey [see, e.g., @Ansell2014; @Clayton2019].
+Some works have captured some element of change over time by taking advantage of multiple waves of an ongoing cross-national survey [see, e.g., @Adams2016; @Abou-Chadi2019] or, less commonly, drawing on multiple surveys that employed the same items [see, e.g., @Ezrow2014; @Dalton2017].
+Only very rarely are scholars able to capitalize on a relevant item that has been frequently asked by the same survey in many countries: see, for example, how @Norris2011 [, 70-77] took advantage of the Eurobarometer's longstanding questions on trust in government, and @Hagemann2017 that program's equally longstanding item on whether European integration is a "good thing." 
 
 <!-- A growing body of work is taking a different tack, examining the dynamics of public opinion in single countries over time.  These studies draw on -->
 
