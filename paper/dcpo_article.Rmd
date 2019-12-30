@@ -53,18 +53,17 @@ A perennial problem confronting scholars of comparative public opinion is that t
 Although a wealth of surveys may provide information on the state of public opinion on the issue of interest in different countries over the years, significant hurdles exist to putting all of this information to use in any comparative study.
 
 As a result, much work in the study of comparative public opinion examines one cross-section of countries, typically provided by a single cross-national survey [see, e.g., @Ansell2014; @Clayton2019].
-Some studies capture some element of change over time by taking advantage of multiple waves of an ongoing cross-national survey [see, e.g., @Adams2016; @Abou-Chadi2019] or, less commonly, drawing on multiple surveys that employed the same items [see, e.g., @Ezrow2014; @Dalton2017].
+Some studies capture some element of change over time by taking advantage of multiple waves of an ongoing cross-national survey [see, e.g., @Abou-Chadi2019; @Busemeyer2020] or, less commonly, drawing on multiple surveys that employed the same items [see, e.g., @Ezrow2014; @Dalton2017].
 Only very rarely are scholars able to capitalize on a relevant item that has been frequently asked by the same survey in many countries: see, for example, how @Norris2011 [, 70-77] took advantage of the Eurobarometer's longstanding questions on trust in government, and @Hagemann2017 that program's equally longstanding item on whether European integration is a "good thing." 
 
-A growing body of work is taking a different tack, examining the dynamics of public opinion in one or a few countries over time.
+A growing body of work takes a different tack, examining the dynamics of public opinion in one or a few countries over time.
 One approach of this sort compiles responses to the same survey questions asked on an annual or near-annual basis [see, e.g., @Hobolt2008; @Soroka2010].
-Given the paucity of items asked with such regularity, however, 
+But few topics enjoy the benefit of items asked with such regularity, even within only a single country, and concerns that any single question can adequately capture opinion are well placed. 
+These factors have led to works applying the dyad-ratios method elaborated in @Stimson1991, tremendously influential in the study of American politics, beyond the U.S. case: among others, see, @Bellucci2017 on Italian policy mood and @Jennings2017 on British political discontent.
 
 
 
-@Stimson1991; @Stimson2018
-
-Multicountry Stimson: @Guinaudeau2019; @Carlin2018
+Multicountry Stimson: @Carlin2018; @Guinaudeau2019 
 
 <!-- Carlin2019: single-cross section of Latinobarometer, plus Stimson of presidential approval for 17 countries -->
 
@@ -72,10 +71,6 @@ Multicountry Stimson: @Guinaudeau2019; @Carlin2018
 <!-- lack of dynamics (in contrast to public opinion work in U.S.) -->
 <!-- Check out -->
 <!-- 	Thomassen2011 -->
-
-<!-- problem: 	scarce data -->
-<!-- 		perennial problem of public opinion research: exact question wanted is rarely asked -->
-<!-- 		no (good) way to (fully) integrate what does exist -->
 
 <!-- question of feedback: positive or negative? ("policies create constituencies" vs. thermostatic) under what conditions? -->
 
@@ -87,6 +82,11 @@ Two recent works, @Claassen2019 and @Caughey2019, have introduced a latent varia
 This paper presents DCPO, a new model and software for estimating latent variables of comparative dynamic public opinion from cross-national survey data.
 The DCPO model yields superior fit and more quantities of theoretical interest than previous works allow.
 The DCPO software not only estimates this model, but also facilitates the formidable data management tasks involved: collecting and managing the survey datasets, identifying the country-years in which respondents were contacted in each, and preparing the response data for the model.
+
+The paper begins with a detailed description of the DCPO model, building up from the individual level.
+It continues with a comparison of the performance of the DCPO model to the alternate models of public opinion presented in @Claassen2019 and @Caughey2019.
+A discussion of the workflow involved in generating estimates of dynamic comparative public opinion with the DCPO software follows.
+The paper concludes with notes on how DCPO estimates and those of other latent variable models are best employed in analyses.
 
 
 # Estimating Dynamic Comparative Public Opinion
@@ -261,13 +261,13 @@ comparison_data <- tibble::tribble(
 comparison_ht <- comparison_data %>%
   as_hux() %>% 
   add_colnames() %>% 
-  set_width(.6) %>%
+  set_width(.8) %>%
   set_bold(1, 1:5, TRUE) %>% 
   set_bold(everywhere, final(1), TRUE) %>% 
   set_top_border(1, everywhere, 1) %>%
   set_bottom_border(1, 1:5, 1) %>%
   set_bottom_border(final(1), everywhere, 1) %>% 
-  set_caption('Comparing Models of Public Opinion') %>% 
+  set_caption('Comparing Latent Variable Models of Public Opinion') %>% 
   set_position("left") %>% 
   set_escape_contents(everywhere, everywhere, FALSE) %>% 
   set_background_color(evens, everywhere, "grey95") %>% 
@@ -283,10 +283,11 @@ It reveals that DCPO incorporates the desirable features from each of those thre
 DCPO generates estimates of public opinion that are comparable not only over time but also across countries, takes advantage of all of the information encoded in responses to ordinal questions, explicitly accounts for country-item bias by including terms to capture country-varying question difficulty, provides easily interpreted bounded estimates of mean public opinion, and includes the standard deviation of public opinion by country-year to represent the extent of polarization.
 The next section provides a demonstration of how these features allow DCPO to provide a better fit to actual data.
 
-# Relative Performance
-To assess the ability of DCPO to fit public opinion data relative to alternative approaches, I use the set of survey questions on support for democracy employed in @Claassen2019 [, 7-8].
 
-The first three columns of Table \ref{tab:validation_table} present the results of the internal validation test, that is, a test that uses the same data that was used to fit the model [see, e.g., @Claassen2019, 9].
+# Relative Fit
+To assess the ability of DCPO to fit public opinion data relative to the two alternative approaches, I use the set of survey questions on support for democracy employed in @Claassen2019 [, 7-8].
+
+The first three columns of Table \ref{tab:validation_table} present the results of an internal validation test, that is, a test that uses the same data that was used to fit the model [see, e.g., @Claassen2019, 9].
 In column 1, the mean absolute error (MAE) measures the average difference between the observed proportion of survey respondents in country $k$ in year $t$ with replies to question $q$ with a response at least as positive as response $r$ (or with an affirmative response, in the case of Claassen's [-@Claassen2019] Model 5) and the model's predicted proportion across all countries, years, questions, and response categories.
 Given, however, that Claassen's [-@Claassen2019] Model 5 is fit to dichotomized data, while the @Caughey2019 and DCPO models are fit to the original, possibly ordinal, survey data, which have higher variance, comparing the MAE across all three models can be somewhat misleading.
 Therefore, the MAE of the country means---the average proportions answering affirmatively (for Claassen's [-@Claassen2019] Model 5) or with a response at least as positive as response $r$ (for @Caughey2019 and DCPO) in each country across all years and all questions---serve as a baseline [see @Claassen2019, 11-12]; these appear in column 2.
@@ -306,7 +307,7 @@ validation_table
 
 Comparing first the results for Claassen's [-@Claassen2019] Model 5 with those for the @Caughey2019 model reveals that, at least for this set of survey questions, while the former has a smaller MAE, the latter accounts for a larger percentage of the variation in its source data left unexplained by its respective country-means model.
 This is true both in the internal validation test and on average across the ten folds of the external validation test.
-Again, this discrepancy is possible due to the greater variance in the survey data when its ordinal nature is preserved, as in the @Caughey2019 model, rather than dichotomized, as in Claassen's [-@Claassen2019] Model 5.
+Again, this discrepancy is possible due to the greater variance in the survey data when its ordinal nature is preserved, as in the @Caughey2019 model, rather than dichotomized, as in Claassen's [-@Claassen2019] approach.
 An examination of column 6 reveals that the @Caughey2019 model yielded predictions with credible intervals that are much too narrow, encompassing only about 13% of the actual observations, while those for Claassen's [-@Claassen2019] Model 5 were slightly too conservative.^[
 The relatively poor uncertainty estimates of the @Caughey2019 model are similar to those found for the dichotomous version presented in @Caughey2015 by @Claassen2019 [, 12].]
 
