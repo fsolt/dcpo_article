@@ -50,7 +50,7 @@ library(latex2exp)
 ```
 
 A perennial problem confronting scholars of comparative public opinion is that the exact question relevant to their research topic is only infrequently asked, making response data scarce across countries and over time.
-Although a wealth of surveys may provide information on the state of public opinion on the issue of interest in different countries over the years, significant hurdles exist to putting all of this information to use in any comparative study.
+Although a wealth of surveys may provide information on the state of public opinion on the issue of interest in different countries over the years, significant hurdles exist to putting all of this information to use in any comparative study, beginning with the incomparability of the multitude of different questions asked.
 
 As a result, much work in the study of comparative public opinion examines one cross-section of countries, typically provided by a single cross-national survey [see, e.g., @Ansell2014; @Clayton2019].
 Some studies capture some element of change over time by taking advantage of multiple waves of an ongoing cross-national survey [see, e.g., @Abou-Chadi2019; @Busemeyer2020] or, less commonly, drawing on multiple surveys that employed the same items [see, e.g., @Ezrow2014; @Dalton2017].
@@ -72,12 +72,12 @@ A shortcoming of this approach, however, is that because each country's series i
 
 <!-- question of feedback: positive or negative? ("policies create constituencies" vs. thermostatic) under what conditions? See also Busemeyer2020-->
 
-Latent variable models provide a means of overcoming this problem, and they have become a very useful tool for combining the information available in disparate sources into cross-nationally comparable time series. 
+Latent variable models estimated with Bayesian methods provide a means of overcoming this problem, and they have become a very useful tool for combining the information available in disparate sources into cross-nationally comparable time series. 
 Such models have been used to measure many difficult concepts in comparative politics, from democracy [@Treier2008; @Pemstein2010] through governance [@Arel-Bundock2011] and state capacity [@Hanson2019] to judicial independence [@Linzer2015] and respect for human rights [@Fariss2014].
 Two recent works, @Claassen2019 and @Caughey2019, have introduced a latent variable approach to the study of comparative public opinion that maximizes the information gleaned from available surveys to overcome issues of sparse and incomparable data and allow comparativists to examine the dynamics of public opinion.
 
 This paper presents DCPO, a new model and software for estimating latent variables of comparative dynamic public opinion from cross-national survey data.
-The DCPO model yields superior fit and more quantities of theoretical interest than previous works allow.
+The DCPO model yields superior fit and more quantities of theoretical interest than the models offered in previous works allow.
 The `DCPO` package for R not only estimates this model, but also facilitates the formidable data management tasks involved: collecting and managing the survey datasets, identifying the country-years in which respondents were contacted in each, and preparing the response data for the model.
 
 The paper begins with a detailed description of the DCPO model, building up from the individual level.
@@ -317,16 +317,23 @@ In both cases, these represent the largest percentage improvement over the count
 Further, in the external validation test, the DCPO credible intervals come closest to matching the nominal 80% level of any of the three models.
 
 
-# Usage
+# Data Preparation
 
-## Uncertainty
-Since ci can be large, need to take uncertainty into account---don't use means only.  
-Follow example of work using other latent variables [@Crabtree2015] and other measures incorporating uncertainty, like the SWIID [@Solt2020].  
-Existing work: @OGrady2019 (doesn't look like it, but confirm)
-@Claassen2020a (no)
-@Claassen2020b (no).
+Although a good model for public opinion across countries and over time is important, the data science rule---that at least 80\% of a project consists of wrangling data---applies with full force when conducting research of this sort.
+Fortunately, in addition to estimating the DCPO model, the `DCPO` package facilitates the formidable data management tasks involved: collecting and managing the survey datasets, identifying the country-years in which respondents were contacted in each, and preparing the response data for the model.^[
+NB: At the moment, these functions are split out into the `DCPOtools` package, but once `DCPOtools` is published to CRAN, `DCPO` will import it.
+This will be done before the paper goes out.]
 
-## Collecting Data
+To generate estimates using `DCPO`, one must first identify a list of questions that tap the desired aspect of public opinion, the order of their respective response categories, and the surveys in which they were asked.
+This is an irreducibly labor-intensive task.^[
+Triggering with a single click a series identical keyword searches across the major data archives should be possible, and would potentially speed this process at least a little, but I have not as yet pushed in this direction.]
+But subsequent data managment chores are handled by the software.
+
+`DCPO` contains information on the country-years in which respondents were surveyed for over 600 survey datasets---users can easily add more---and it takes advantage of the work of @Arel-Bundock2018 to standardize the names of countries across datasets.
+To ensure easy collaboration and replicability, the package automates, with a single command, the task of downloading the needed survey datasets from the GESIS Data Catalogue [@Persson2015], the ICPSR Data Archive [@Solt2016b], the Pew Research Center [@Solt2016a], the Roper Center for Public Opinion Research [@Solt2017], the Dataverse Network [@Leeper2017], the European Social Survey [@Cimentada2019], and many other sources.
+(To be sure, there are many surveys for which downloads cannot be automated---for example the Asian Barometer, which is available only via email---but this step nevertheless greatly speeds the work of dataset acquisition.)
+An additional line of code generates the raw dataset: the weighted number of respondents in each country-year who provided each response to each question in each survey in the researcher's list.
+One last function reformats the data as input to estimate the DCPO model.
 
 # Conclusions
 <!-- strengths: -->
@@ -338,13 +345,22 @@ Existing work: @OGrady2019 (doesn't look like it, but confirm)
 <!-- 	data collection demands -->
 <!-- 	challenges at individual level (but subsets) -->
 
-Single-country studies of public opinion have flourished since the release of Stimson's [-@Stimson1991] algorithm for identifying the common trends in any collection of survey questions that have been repeatedly asked over many years.
-By extending this work to allow the creation of cross-national pooled time series that identify how public opinion varies both across countries and over time, DCPO has the potential to trigger a new wave of research on the causes and consequences of public opinion that will take into account the experiences of many countries.
+The development of latent variable models that identify how public opinion varies both across countries and over time have the potential to trigger a new wave of research on the causes and consequences of public opinion that will take into account the experiences of many countries.
+This will be crucial for developing and testing our understanding of, for example, not merely _if_ policy change leads to changes in public opinion, but to _the conditions in which_ accelerating, self-reinforcing, or self-undermining feedback [in the useful typology proposed by @Busemeyer2020] are more likely to occur.
+
+
+Researchers employing DCPO and other similar approaches, however, should be aware that while the models are meant to make the most of the data available, such models cannot complete eradicate the issues of data scarcity and incomparability.
+Rather, where and when data are more sparse, the credible intervals of the model estimates will---and should---expand to reflect our greater uncertainty as to the state of public opinion.
+When using the resulting public opinion estimates in analyses, this uncertainty needs to be taken into account.
+This means not 
+Follow example of work using other latent variables [@Crabtree2015] and other measures incorporating uncertainty, like the SWIID [@Solt2020].  
+Existing work: @OGrady2019 (doesn't look like it, but confirm)
+@Claassen2020a (no)
+@Claassen2020b (no).
 
 Further, this allows a broadly comparative approach that is new to work on the relationship between opinion and policy.
 Existing studies on that examine this topic over time investigate only a single country or, much more rarely, a handful of countries.
 By examining a broad sample of democracies, DCPO helps researchers avoid conclusions based on the idiosyncrasies of any given political setting and provide a firmer grounding for our understanding of how democracies work and the threats to representation that they face.
-
 
 <!-- Re reproducibility: @Damian2019 -->
 
