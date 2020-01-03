@@ -7,7 +7,7 @@ output:
     latex_engine: pdflatex
     template: svm-latex-ms2.tex
 title: "Modeling Dynamic Comparative Public Opinion [DRAFT]"
-thanks: "The paper's revision history and the materials needed to reproduce its analyses can be found [on Github here](http://github.com/fsolt/dcpo_article).  I am grateful for comments received at the 2014 meetings of the European Political Science Association and American Political Science Association, the 2016 meeting of the Midwest Political Science Association, and at Princeton University, Oxford University, the University of Tennessee, the University of Iowa, Central European University, and the Polish Academy of Sciences.  Corresponding author: [frederick-solt@uiowa.edu](mailto:frederick-solt@uiowa.edu). Current version: `r format(Sys.time(), '%B %d, %Y')`."
+thanks: "Prepared for the 2020 meeting of the Southern Political Science Association.  The paper's revision history and the materials needed to reproduce its analyses can be found [on Github here](http://github.com/fsolt/dcpo_article).  I am grateful for comments received at the 2014 meetings of the European Political Science Association and American Political Science Association, the 2016 meeting of the Midwest Political Science Association, and at Princeton University, Oxford University, the University of Tennessee, the University of Iowa, Central European University, and the Polish Academy of Sciences.  Corresponding author: [frederick-solt@uiowa.edu](mailto:frederick-solt@uiowa.edu). Current version: `r format(Sys.time(), '%B %d, %Y')`."
 author:
 - name: Frederick Solt
   affiliation: University of Iowa
@@ -62,7 +62,7 @@ But even narrowing one's focus to only a single country typically gains few item
 These factors have led to research applying the dyad-ratios algorithm elaborated in @Stimson1991, tremendously influential in the study of American politics, beyond the U.S. case: among others, @Bellucci2017 on Italian policy mood and @Jennings2017 on British political discontent.
 
 There have even been applications of Stimson's dyad-ratios method to each of many countries in recent years.
-@Carlin2018, for example, generate time series of presidential approval across eighteen Latin American countries, and @Guinaudeau2019 generate annual measures of attitudes toward European integration across the countries of the European Union.
+@Carlin2018, for example, generate time series of presidential approval in eighteen Latin American countries, and @Guinaudeau2019 generate annual measures of attitudes toward European integration in the countries of the European Union.
 A shortcoming of this approach, however, is that because each country's series is estimated separately, the results are not assured to be comparable across countries.
 
 <!-- field of comparative public opinion -->
@@ -82,8 +82,7 @@ The `DCPO` package for R not only estimates this model, but also facilitates the
 
 The paper begins with a detailed description of the DCPO model, building up from the individual level.
 It continues with a comparison of the performance of the DCPO model to the alternate models of public opinion presented in @Claassen2019 and @Caughey2019.
-A discussion of the workflow involved in generating estimates of dynamic comparative public opinion with the `DCPO` software follows.
-The paper concludes with notes on how DCPO estimates and those of other latent variable models are best employed in analyses.
+The paper then describes the workflow involved in generating estimates of dynamic comparative public opinion with the `DCPO` software and employing them in analyses.
 
 
 # Estimating Dynamic Comparative Public Opinion
@@ -285,7 +284,7 @@ The next section provides a demonstration of how these features allow DCPO to pr
 
 
 # Relative Fit
-To assess the ability of DCPO to fit public opinion data relative to the two alternative approaches, I use the set of survey questions on support for democracy employed in @Claassen2019 [, 7-8].
+To assess the ability of the DCPO model to fit public opinion data relative to the two alternative approaches, I use the set of survey questions on support for democracy employed in @Claassen2019 [, 7-8].
 
 The first three columns of Table \ref{tab:validation_table} present the results of an internal validation test, that is, a test that uses the same data that was used to fit the model [see, e.g., @Claassen2019, 9].
 In column 1, the mean absolute error (MAE) measures the average difference between the observed proportion of survey respondents in country $k$ in year $t$ with replies to question $q$ with a response at least as positive as response $r$ (or with an affirmative response, in the case of Claassen's [-@Claassen2019] Model 5) and the model's predicted proportion across all countries, years, questions, and response categories.
@@ -308,7 +307,7 @@ validation_table
 Comparing first the results for Claassen's [-@Claassen2019] Model 5 with those for the @Caughey2019 model reveals that, at least for this set of survey questions, while the former has a smaller MAE, the latter accounts for a larger percentage of the variation in its source data left unexplained by its respective country-means model.
 This is true both in the internal validation test and on average across the ten folds of the external validation test.
 Again, this discrepancy is possible due to the greater variance in the survey data when its ordinal nature is preserved, as in the @Caughey2019 model, rather than dichotomized, as in Claassen's [-@Claassen2019] approach.
-An examination of column 6 reveals that the @Caughey2019 model yielded predictions with credible intervals that are much too narrow, encompassing only about 13% of the actual observations, while those for Claassen's [-@Claassen2019] Model 5 were slightly too conservative.^[
+An examination of column 6 reveals that the @Caughey2019 model yielded predictions with credible intervals that are much too narrow, encompassing only about 13% of the actual sample observations, while those for Claassen's [-@Claassen2019] Model 5 were slightly too conservative.^[
 The relatively poor uncertainty estimates of the @Caughey2019 model are similar to those found for the dichotomous version presented in @Caughey2015 by @Claassen2019 [, 12].]
 
 However, it is the DCPO model that provides what is unambiguously the best fit.
@@ -317,38 +316,25 @@ In both cases, these represent the largest percentage improvement over the count
 Further, in the external validation test, the DCPO credible intervals come closest to matching the nominal 80% level of any of the three models.
 
 
-# Data Preparation
+# Preparing and Using DCPO Estimates of Public Opinion
 
-Although a good model for public opinion across countries and over time is important, the data science rule---that at least 80\% of a project consists of wrangling data---applies with full force when conducting research of this sort.
+The old saw of data science---that at least 80\% of any project consists of wrangling the data [see, e.g., @Lohr2014]---applies with full force when conducting research on public opinion across countries and over time.
 Fortunately, in addition to estimating the DCPO model, the `DCPO` package facilitates the formidable data management tasks involved: collecting and managing the survey datasets, identifying the country-years in which respondents were contacted in each, and preparing the response data for the model.^[
-NB: At the moment, these functions are split out into the `DCPOtools` package, but once `DCPOtools` is published to CRAN, `DCPO` will import it.
+NB: At the moment, these functions are split out into [the `DCPOtools` package](https://github.com/fsolt/DCPOtools), but once `DCPOtools` is published to CRAN, `DCPO` will import it and incorporate its features.
 This will be done before the paper goes out.]
 
 To generate estimates using `DCPO`, one must first identify a list of questions that tap the desired aspect of public opinion, the order of their respective response categories, and the surveys in which they were asked.
 This is an irreducibly labor-intensive task.^[
 Triggering with a single click a series identical keyword searches across the major data archives should be possible, and would potentially speed this process at least a little, but I have not as yet pushed in this direction.]
-But subsequent data managment chores are handled by the software.
+But subsequent data managment chores are largely automated.
 
 `DCPO` contains information on the country-years in which respondents were surveyed for over 600 survey datasets---users can easily add more---and it takes advantage of the work of @Arel-Bundock2018 to standardize the names of countries across datasets.
-To ensure easy collaboration and replicability, the package automates, with a single command, the task of downloading the needed survey datasets from the GESIS Data Catalogue [@Persson2015], the ICPSR Data Archive [@Solt2016b], the Pew Research Center [@Solt2016a], the Roper Center for Public Opinion Research [@Solt2017], the Dataverse Network [@Leeper2017], the European Social Survey [@Cimentada2019], and many other sources.
-(To be sure, there are many surveys for which downloads cannot be automated---for example the Asian Barometer, which is available only via email---but this step nevertheless greatly speeds the work of dataset acquisition.)
+To ensure easy collaboration and replicability, the package automates, with a single command, the task of downloading needed survey datasets from the GESIS Data Catalogue [@Persson2015], the ICPSR Data Archive [@Solt2016b], the Pew Research Center [@Solt2016a], the Roper Center for Public Opinion Research [@Solt2017], the Dataverse Network [@Leeper2017], the European Social Survey [@Cimentada2019], and many other sources.
+To be sure, there are many surveys for which downloads cannot be automated---for example the Asian Barometer, which is available only via email---but this step nevertheless greatly speeds the work of dataset acquisition.
 An additional line of code generates the raw dataset: the weighted number of respondents in each country-year who provided each response to each question in each survey in the researcher's list.
 One last function reformats the data as input to estimate the DCPO model.
 
-# Conclusions
-<!-- strengths: -->
-<!--     makes maximum use of available data -->
-<!-- 	permits testing hypotheses regarding change over time -->
-<!-- 	incorporates uncertainty -->
-
-<!-- weaknesses: -->
-<!-- 	data collection demands -->
-<!-- 	challenges at individual level (but subsets) -->
-
-The development of latent variable models that identify how public opinion varies both across countries and over time have the potential to trigger a new wave of research on the causes and consequences of public opinion that will take into account the experiences of many countries.
-This will be crucial for developing and testing our understanding of, for example, not merely if policy change leads to changes in public opinion, but to the conditions in which accelerating, self-reinforcing, or self-undermining feedback [in the useful typology proposed by @Busemeyer2020] are more likely to occur.
-
-Researchers employing DCPO and other similar approaches, however, should be aware that while the models are meant to make the most of the data available, such models cannot complete eradicate the issues of data scarcity and incomparability.
+After estimating the DCPO model, researchers should be aware that while such latent variable models seek to make the most of the data available, they cannot complete eradicate the issues of data scarcity and incomparability.
 Rather, where and when data are more sparse, the credible intervals of the model estimates will---and should---expand to reflect our greater uncertainty as to the state of public opinion.
 When using the resulting public opinion estimates in analyses, this uncertainty needs to be taken into account.
 This means not simply employing the point estimates, that is, the means of the posterior distributions [_contra_ @Claassen2020a; @Claassen2020b].^[
@@ -356,8 +342,16 @@ The analysis in @OGrady2019 appears to do the same, but the replication material
 
 Instead, researchers should follow the recommendations of work using other latent variables [e.g., @Schnakenberg2014; @Crabtree2015] and other measures incorporating uncertainty, such as the Standardized World Income Inequality Database [@Solt2020]: generate many duplicate versions of the analysis dataset, assign to each a different random draw from the posterior distributions, perform the analyses repeatedly on each of these multiple versions of the dataset, and combine the results following the rules set out in @Rubin1987.
 The functional programming tools in the `purrr` package [@Henry2019] make this a matter of just a few additional lines of code.
-Although it is intuitive that neglecting measurement error can lead to false positive results, the example of @Crabtree2015 demonstrates that doing so can lead to false negative results as well.
+Although it is intuitive that neglecting measurement error can lead to false positive results, the example presented by @Crabtree2015 demonstrates that doing so can lead to false negative results as well.
 Quantifying the uncertainty in the measures is one of the strengths of this sort of latent variable estimation; researchers should be sure to take advantage of it.
+
+\vspace{30pt}
+\noindent \textbf{[Could probably use an application here, especially one that shows off the value of having $\sigma_{k,t}$ as a measure of polarization in public opinion.]}
+
+# Conclusions
+
+The development of latent variable models that identify how public opinion varies both across countries and over time has the potential to trigger a new wave of research on the causes and consequences of public opinion that will take into account the experiences of many countries.
+This will be crucial for developing and testing our understanding of, for example, not merely if policy change leads to changes in public opinion, but to the conditions in which accelerating, self-reinforcing, or self-undermining feedback [in the useful typology proposed by @Busemeyer2020] are more likely to occur.
 
 By examining a broad sample of democracies, DCPO helps researchers avoid conclusions based on the idiosyncrasies of any given political setting and provide a firmer grounding for our understanding of how democracies work and the threats to representation that they face.
 
