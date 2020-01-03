@@ -7,7 +7,7 @@ output:
     latex_engine: pdflatex
     template: svm-latex-ms2.tex
 title: "Modeling Dynamic Comparative Public Opinion [DRAFT]"
-thanks: "Prepared for the 2020 meeting of the Southern Political Science Association.  The paper's revision history and the materials needed to reproduce its analyses can be found [on Github here](http://github.com/fsolt/dcpo_article).  I am grateful for comments received at the 2014 meetings of the European Political Science Association and American Political Science Association, the 2016 meeting of the Midwest Political Science Association, and at Princeton University, Oxford University, the University of Tennessee, the University of Iowa, Central European University, and the Polish Academy of Sciences.  Corresponding author: [frederick-solt@uiowa.edu](mailto:frederick-solt@uiowa.edu). Current version: `r format(Sys.time(), '%B %d, %Y')`."
+thanks: "Prepared for the 2020 meeting of the Southern Political Science Association.  The paper's revision history and the materials needed to reproduce its analyses can be found [on Github here](http://github.com/fsolt/dcpo_article).  I am grateful for comments received on previous versions of this project at the 2014 meetings of the European Political Science Association and American Political Science Association, the 2016 meeting of the Midwest Political Science Association, and at Princeton University, Oxford University, the University of Tennessee, the University of Iowa, Central European University, and the Polish Academy of Sciences.  Corresponding author: [frederick-solt@uiowa.edu](mailto:frederick-solt@uiowa.edu). Current version: `r format(Sys.time(), '%B %d, %Y')`."
 author:
 - name: Frederick Solt
   affiliation: University of Iowa
@@ -61,7 +61,7 @@ One approach of this sort compiles responses to the same survey questions asked 
 But even narrowing one's focus to only a single country typically gains few items asked with such regularity, and concerns that any single question can adequately capture opinion are well placed. 
 These factors have led to research applying the dyad-ratios algorithm elaborated in @Stimson1991, tremendously influential in the study of American politics, beyond the U.S. case: among others, @Bellucci2017 on Italian policy mood and @Jennings2017 on British political discontent.
 
-There have even been applications of Stimson's dyad-ratios method to each of many countries in recent years.
+In recent years, there have even been applications of Stimson's dyad-ratios method to each of many countries.
 @Carlin2018, for example, generate time series of presidential approval in eighteen Latin American countries, and @Guinaudeau2019 generate annual measures of attitudes toward European integration in the countries of the European Union.
 A shortcoming of this approach, however, is that because each country's series is estimated separately, the results are not assured to be comparable across countries.
 
