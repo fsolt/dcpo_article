@@ -346,20 +346,19 @@ One last function reformats the data as input to estimate the DCPO model.
 <!-- 	challenges at individual level (but subsets) -->
 
 The development of latent variable models that identify how public opinion varies both across countries and over time have the potential to trigger a new wave of research on the causes and consequences of public opinion that will take into account the experiences of many countries.
-This will be crucial for developing and testing our understanding of, for example, not merely _if_ policy change leads to changes in public opinion, but to _the conditions in which_ accelerating, self-reinforcing, or self-undermining feedback [in the useful typology proposed by @Busemeyer2020] are more likely to occur.
-
+This will be crucial for developing and testing our understanding of, for example, not merely if policy change leads to changes in public opinion, but to the conditions in which accelerating, self-reinforcing, or self-undermining feedback [in the useful typology proposed by @Busemeyer2020] are more likely to occur.
 
 Researchers employing DCPO and other similar approaches, however, should be aware that while the models are meant to make the most of the data available, such models cannot complete eradicate the issues of data scarcity and incomparability.
 Rather, where and when data are more sparse, the credible intervals of the model estimates will---and should---expand to reflect our greater uncertainty as to the state of public opinion.
 When using the resulting public opinion estimates in analyses, this uncertainty needs to be taken into account.
-This means not 
-Follow example of work using other latent variables [@Crabtree2015] and other measures incorporating uncertainty, like the SWIID [@Solt2020].  
-Existing work: @OGrady2019 (doesn't look like it, but confirm)
-@Claassen2020a (no)
-@Claassen2020b (no).
+This means not simply employing the point estimates, that is, the means of the posterior distributions [_contra_ @Claassen2020a; @Claassen2020b].^[
+The analysis in @OGrady2019 appears to do the same, but the replication materials for that article are as yet not accessible to confirm.]
 
-Further, this allows a broadly comparative approach that is new to work on the relationship between opinion and policy.
-Existing studies on that examine this topic over time investigate only a single country or, much more rarely, a handful of countries.
+Instead, researchers should follow the recommendations of work using other latent variables [e.g., @Schnakenberg2014; @Crabtree2015] and other measures incorporating uncertainty, such as the Standardized World Income Inequality Database [@Solt2020]: generate many duplicate versions of the analysis dataset, assign to each a different random draw from the posterior distributions, perform the analyses repeatedly on each of these multiple versions of the dataset, and combine the results following the rules set out in @Rubin1987.
+The functional programming tools in the `purrr` package [@Henry2019] make this a matter of just a few additional lines of code.
+Although it is intuitive that neglecting measurement error can lead to false positive results, the example of @Crabtree2015 demonstrates that doing so can lead to false negative results as well.
+Quantifying the uncertainty in the measures is one of the strengths of this sort of latent variable estimation; researchers should be sure to take advantage of it.
+
 By examining a broad sample of democracies, DCPO helps researchers avoid conclusions based on the idiosyncrasies of any given political setting and provide a firmer grounding for our understanding of how democracies work and the threats to representation that they face.
 
 <!-- Re reproducibility: @Damian2019 -->
