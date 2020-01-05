@@ -205,7 +205,7 @@ y_{ktqr} \sim \textrm{BetaBinomial}(n_{ktqr}, a_{ktqr}, b_{ktqr}) \label{eq:beta
 
 Then, to estimate the dynamics of comparative public opinion---the change over time---the prior distributions for the public opinion parameters in Equation \ref{eq:dcpo}, $\bar{\theta'}_{kt}$ and $\sigma_{kt}$, are given by simple local-level dynamic linear  models:
 \begin{equation}
-\bar{\theta}_{kt} \sim \textrm{N}(\bar{\theta'}_{k,t-1}, \sigma_{\bar{\theta'}}^2) \label{eq:prior_theta}
+\bar{\theta'}_{kt} \sim \textrm{N}(\bar{\theta'}_{k,t-1}, \sigma_{\bar{\theta'}}^2) \label{eq:prior_theta}
 \end{equation}
 \begin{equation}
 \sigma_{kt} \sim \textrm{LN}(\sigma_{k,t-1}, \sigma_{\sigma}^2) \label{eq:prior_sigma}
