@@ -185,7 +185,7 @@ This yields a population-level graded response model:
 Again, the differences between Equation \ref{eq:pop_grm} for the population-level graded response model and Equation \ref{eq:pop_irt} for the population-level two-parameter logistic IRT model above are in the additional subscripts for $r$ to $\eta$ and $\beta$.
 In Equation \ref{eq:pop_grm}, $\eta_{ktqr}$ is the expected probability that a random individual in country $k$ at time $t$ replies to question $q$ with a response at least as positive as response $r$.
 And the additional subscript to $\beta_{qr}$ indicates that this parameter represents the difficulty of response $r$ of question $q$, constrained to be increasing for increasing $r$. 
-That is, the model assumes that the response of "strongly agree" will, on average, reflect higher levels of the latent trait than the response of "agree."
+That is to say, for example, that the model makes the straightforward assumption that the response of "strongly agree" to a question will, on average across respondents, reflect higher levels of the latent trait than the response of "agree" to that same question.
 
 A final addition to the DCPO model of the probability $\eta_{ktqr}$ takes into account differences in item response bias across countries.
 Responses to survey questions may vary across different countries not only as a result of differences in attitudes and preferences but also due to translation issues [see, e.g., @Davidov2010], cultural differences in acquiescence and extreme response styles [see, e.g., @VanHerk2004], or other idiosyncrasies---recall Tarrow's [-@Tarrow1971, 344] famous observation that the French understood survey questions regarding their 'interest in politics' as inquiring about the strength of their partisan affiliations.
@@ -215,10 +215,12 @@ b_{ktqr} = \phi(1 - \eta_{ktqr}) \label{eq:bb_b}
 y_{ktqr} \sim \textrm{BetaBinomial}(n_{ktqr}, a_{ktqr}, b_{ktqr}) \label{eq:betabinomial}
 \end{equation}
 
-Then, to estimate the dynamics of comparative public opinion---the change over time---the prior distributions for the public opinion parameters in Equation \ref{eq:dcpo}, $\bar{\theta'}_{kt}$ and $\sigma_{kt}$, are given by simple local-level dynamic linear  models:
+Then, to account for the dynamics of comparative public opinion---the change over time---the prior distributions for the public opinion parameters in Equation \ref{eq:dcpo}, $\bar{\theta'}_{kt}$ and $\sigma_{kt}$, are given by simple local-level dynamic linear models.
+For $\bar{\theta'}_{kt}$, this random-walk prior takes the following form:
 \begin{equation}
 \bar{\theta'}_{kt} \sim \textrm{N}(\bar{\theta'}_{k,t-1}, \sigma_{\bar{\theta'}}^2) \label{eq:prior_theta}
 \end{equation}
+For $\sigma_{kt}$, which may only take on positive values, a log-normally distributed prior is used:
 \begin{equation}
 \sigma_{kt} \sim \textrm{LN}(\sigma_{k,t-1}, \sigma_{\sigma}^2) \label{eq:prior_sigma}
 \end{equation}
