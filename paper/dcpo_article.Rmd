@@ -74,9 +74,9 @@ A shortcoming of this approach, however, is that because each country's series i
 
 Latent variable models estimated with Bayesian methods provide a means of overcoming this problem, and they have become a very useful tool for combining the information available in disparate sources into cross-nationally comparable time series. 
 Such models have been used to measure many difficult concepts in comparative politics, from democracy [@Treier2008; @Pemstein2010] through governance [@Arel-Bundock2011] and state capacity [@Hanson2019] to judicial independence [@Linzer2015] and respect for human rights [@Fariss2014].
-Two recent works, @Claassen2019 and @Caughey2019, have introduced a latent variable approach to the study of comparative public opinion that maximizes the information gleaned from available surveys to overcome issues of sparse and incomparable data and allow comparativists to examine the dynamics of public opinion.
+Two recent works, @Claassen2019 and @Caughey2019, have introduced a Bayesian latent variable approach to the study of comparative public opinion that maximizes the information gleaned from available surveys to overcome issues of sparse and incomparable data and allow comparativists to examine the dynamics of public opinion.
 
-This paper presents DCPO, a new model and software for estimating latent variables of comparative dynamic public opinion from cross-national survey data.
+This paper presents DCPO, a new model and software for estimating Bayesian latent variables of comparative dynamic public opinion from cross-national survey data.
 The DCPO model yields superior fit and more quantities of theoretical interest than the models offered in previous works allow.
 The `DCPO` package for R not only estimates this model, but also facilitates the formidable data management tasks involved: collecting and managing the survey datasets, identifying the country-years in which respondents were contacted in each, and preparing the response data for the model.
 
@@ -94,9 +94,14 @@ The logic underlying DCPO's approach to estimating dynamic comparative public op
 
 Figure \ref{fig:irt} shows how these parameters interact using simulated data.
 First, both panels show that regardless of the question, as an individual's score on the unbounded latent trait, $\theta'_{i}$, increases, the individual becomes more likely to give an affirmative response.
-Second, the left panel reveals that individuals with the same score on the latent trait are less likely to respond affirmatively to a question as the question's difficulty, $\beta_{q}$, increases; here, all three questions depicted have a dispersion of 1.
+Second, the left panel describes how the probability of answering affirmatively changes with question difficulty, $\beta_{q}$: some questions demand more of respondents than others.
+Take, for example, questions regarding abortion.
+One need not hold views very favorable toward abortion rights to agree that abortion should be permitted when the life of the woman is at risk.
+The question is not very difficult, and only those who view abortion very unfavorably will answer negatively.
+To respond affirmatively to a question that asks whether abortion should be permitted for a single woman who does not want to marry the man requires respondents to have more favorable views toward abortion; this question is more difficult.
+The question of whether one *approves* of abortion in this same situation is still more difficult, that is, some people who accept that abortion should be permitted in such cases will nevertheless express disapproval of women who exercise their right.
+The left panel illustrates this graphically: it shows that individuals with the same score on the latent trait are less likely to respond affirmatively to a question as the question's difficulty increases (here, all three questions depicted have a dispersion of 1).
 When $\theta'_{i}$ and $\beta_{q}$ are equal, the probability of an affirmative response is 50%. 
-Third, the right panel shows that as the *dispersion* of the question, $\alpha_{q}$, which is proportional to its measurement error, increases, individuals with lower scores on the latent trait become more likely to respond affirmatively and those with higher scores on the latent trait are more likely to respond negatively; in other words, the slope of the curve describing the relationship between the latent trait and the probability of answering affirmatively flattens out.
 
 ```{r irt, fig.width=6, fig.height=3, fig.cap="\\label{fig:irt}Probability of an Affirmative Response in the 2PL IRT Model"}
 tibble(theta = rep(seq(-3, 3, length.out = 100), 6),
@@ -157,6 +162,12 @@ tibble(theta = rep(seq(-3, 3, length.out = 100), 6),
 
 ```
 
+Third, the right panel of Figure \ref{fig:irt} portrays how the *dispersion* of the question, $\alpha_{q}$, affects the probability of positive responses.
+A question's dispersion is proportional to its measurement error with regard to the latent variable; it may be larger because the question is confusing to some respondents, or because the question does not cleanly map onto the latent trait.
+For example, a question that asks respondents about laws protecting a population from employment discrimination may tap views about workplace protections as much or more than it does attitudes toward the particular group.
+If it is nevertheless used as an indicator of the latter, this question will have a high dispersion.
+As shown in the right panel, as question dispersion increases, individuals with lower scores on the latent trait become more likely to respond affirmatively and those with higher scores on the latent trait are more likely to respond negatively; in other words, the slope of the curve describing the relationship between the latent trait and the probability of answering affirmatively flattens out (here, all three questions depicted have a difficulty of 0).
+
 To aggregate individual-level responses to generate a population-level estimate of public opinion is a matter of integration.
 If scores on the unbounded latent trait are modeled as normally distributed within the population of country $k$ at time $t$, integrating Equation \ref{eq:irt} yields the population-level two-parameter logistic IRT model:
 \begin{equation}
@@ -174,18 +185,19 @@ This yields a population-level graded response model:
 Again, the differences between Equation \ref{eq:pop_grm} for the population-level graded response model and Equation \ref{eq:pop_irt} for the population-level two-parameter logistic IRT model above are in the additional subscripts for $r$ to $\eta$ and $\beta$.
 In Equation \ref{eq:pop_grm}, $\eta_{ktqr}$ is the expected probability that a random individual in country $k$ at time $t$ replies to question $q$ with a response at least as positive as response $r$.
 And the additional subscript to $\beta_{qr}$ indicates that this parameter represents the difficulty of response $r$ of question $q$, constrained to be increasing for increasing $r$. 
+That is, the model assumes that the response of "strongly agree" will, on average, reflect higher levels of the latent trait than the response of "agree."
 
 A final addition to the DCPO model of the probability $\eta_{ktqr}$ takes into account differences in item response bias across countries.
 Responses to survey questions may vary across different countries not only as a result of differences in attitudes and preferences but also due to translation issues [see, e.g., @Davidov2010], cultural differences in acquiescence and extreme response styles [see, e.g., @VanHerk2004], or other idiosyncrasies---recall Tarrow's [-@Tarrow1971, 344] famous observation that the French understood survey questions regarding their 'interest in politics' as inquiring about the strength of their partisan affiliations.
-Rather than simply allowing such problems of equivalence to contribute to the error of the model, they can be addressed explicitly by modeling the country-specific item bias  [@Stegmueller2011], denoted here as $\delta_{kq}$.
-In the context of the population-level graded response model presented in Equation \ref{eq:pop_grm}, including country-specific item bias can be readily understood as a country-varying shift in the difficulty of each question:
+Rather than simply allowing such problems of equivalence to contribute to the error of the model, they can be addressed in part by explicitly modeling the country-specific item bias  [@Stegmueller2011].
+In the context of the population-level graded response model presented in Equation \ref{eq:pop_grm}, this can be done by including country-specific item bias as a country-varying shift in the difficulty of each question, denoted here as $\delta_{kq}$:
 \begin{equation}
 \eta_{ktqr} = \textrm{logit}^{-1}(\frac{\bar{\theta'}_{kt} - (\beta_{qr} + \delta_{kq})}{\sqrt{\alpha_{q}^2 + (1.7*\sigma_{kt})^2}}) \label{eq:dcpo}
 \end{equation}
 Estimating $\delta_{kq}$ in Equation \ref{eq:dcpo} requires repeated administrations of question $q$ in country $k$.
-When responses to question $q$ are observed in country $k$ in only a single year, $\delta_{kq}$ is set to zero by assumption.
-This means that incorporating these 'one-shot' surveys will come at the cost of increasing the error of the model by any country-item bias that is present.^[
-_Pace_ Claassen's [-@Claassen2019, 5-6] approach, which is also to estimate country-specific item bias, but to discard survey data on questions that were not administered more than once in a given country.]
+When responses to question $q$ are observed in country $k$ in only a single year, the DCPO model sets $\delta_{kq}$ to zero by assumption.
+This means that incorporating these 'one-shot' surveys comes at the price of increasing the error of the model by any country-item bias that is present.^[
+Researchers uncomfortable with this price may follow Claassen's [-@Claassen2019, 5-6] approach with regard to country-specific item bias, which is to instead discard survey data on questions that were not administered more than once in a given country at the cost of giving up all of the information contained in these data to guard against the mere risk of introducing some additional error to the estimates.]
 Of course, questions that are asked repeatedly over time in only a single country pose no risk of country-specific item bias, so $\delta_{kq}$ in such cases can be set to zero without harm.
 
 Before continuing, it is useful to pause to briefly review the relationships of the parameters in this equation.
