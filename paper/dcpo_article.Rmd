@@ -220,12 +220,13 @@ For $\bar{\theta'}_{kt}$, this random-walk prior takes the following form:
 \begin{equation}
 \bar{\theta'}_{kt} \sim \textrm{N}(\bar{\theta'}_{k,t-1}, \sigma_{\bar{\theta'}}^2) \label{eq:prior_theta}
 \end{equation}
-For $\sigma_{kt}$, which may only take on positive values, a log-normally distributed prior is used:
+By treating these parameters' values at time $t-1$ as their expected values at time $t$, this prior works to smooth estimates of the mean of the latent trait in the population of each country over time.
+For $\sigma_{kt}$, a lognormally distributed prior is used:
 \begin{equation}
 \sigma_{kt} \sim \textrm{LN}(\sigma_{k,t-1}, \sigma_{\sigma}^2) \label{eq:prior_sigma}
 \end{equation}
-By treating these parameters' values at time $t-1$ as their expected values at time $t$, these priors work to smooth estimates of both the mean and the standard deviation of the latent trait in the population of each country over time.
-If no survey data is available for a particular time, these models provide estimates based on the estimates for previous and subsequent periods.
+The lognormal distribution ensures that the prior for $\sigma_{kt}$ takes on only positive values.
+In both cases, if no survey data is available for a particular time, these dynamic models provide estimates based on the estimates for previous and subsequent periods.
 The variances $\sigma_{\bar{\theta'}}^2$ and $\sigma_{\sigma}^2$ are estimated from the data.
 
 Previous efforts to measure cross-national aggregate public opinion as a latent variable have generated estimates on an unbounded scale with mean zero and unit variance [see @Claassen2019, 14; @Caughey2019, 8], and this is the scale of $\bar{\theta'}_{kt}$.
