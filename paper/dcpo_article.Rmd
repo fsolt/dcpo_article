@@ -223,7 +223,7 @@ For $\bar{\theta'}_{kt}$, this random-walk prior takes the following form:
 By treating these parameters' values at time $t-1$ as their expected values at time $t$, this prior works to smooth estimates of the mean of the latent trait in the population of each country over time.
 For $\sigma_{kt}$, a lognormally distributed prior is used:
 \begin{equation}
-\sigma_{kt} \sim \textrm{LN}(\sigma_{k,t-1}, \sigma_{\sigma}^2) \label{eq:prior_sigma}
+\sigma_{kt} \sim \textrm{LN}(log(\sigma_{k,t-1}), \sigma_{\sigma}^2) \label{eq:prior_sigma}
 \end{equation}
 The lognormal distribution ensures that the prior for $\sigma_{kt}$ takes on only positive values.
 In both cases, if no survey data is available for a particular time, these dynamic models provide estimates based on the estimates for previous and subsequent periods.
@@ -246,7 +246,7 @@ Together, $\sigma_{kt}$, which provides a measure of polarization in public opin
 
 The model is identified by imposing a series of constraints that fix location, direction, and scale.
 The dispersion parameters $\alpha$ are constrained to be positive---and all survey responses are coded to have the same polarity---to fix direction.
-One specified difficulty parameter $\beta$ is set to a value of 1 to identify location, and, as mentioned previously, for each question $q$ the difficulties for increasing response values $r$ are constrained to be increasing.
+One researcher-specified difficulty parameter $\beta$ is set to a value of 1 to identify location, and, as mentioned previously, for each question $q$ the difficulties for increasing response values $r$ are constrained to be increasing.
 To ensure identification, the sum of $\delta_{kq}$ across all countries $k$ is fixed to zero for each question $q$:
 \begin{equation}
 \sum_{k = 1}^K \delta_{kq} = 0
@@ -349,16 +349,16 @@ To be sure, there are many surveys for which downloads cannot be automated---for
 An additional line of code generates the raw dataset: the weighted number of respondents in each country-year who provided each response to each question in each survey in the researcher's list.
 One last function reformats the data as input to estimate the DCPO model.
 
-After estimating the DCPO model, researchers should be aware that while such latent variable models seek to make the most of the data available, they cannot complete eradicate the issues of data scarcity and incomparability.
+After estimating the DCPO model, researchers should be aware that while such latent variable models seek to make the most of the data available, they cannot completely eradicate the issues of data scarcity and incomparability.
 Rather, where and when data are more sparse, the credible intervals of the model estimates will---and should---expand to reflect our greater uncertainty as to the state of public opinion.
 When using the resulting public opinion estimates in analyses, this uncertainty needs to be taken into account.
 This means not simply employing the point estimates, that is, the means of the posterior distributions [_contra_ @Claassen2020a; @Claassen2020b].^[
 The analysis in @OGrady2019 appears to do the same, but the replication materials for that article are as yet not accessible to confirm.]
 
-Instead, researchers should follow the recommendations of work using other latent variables [e.g., @Schnakenberg2014; @Crabtree2015] and other measures incorporating uncertainty, such as the Standardized World Income Inequality Database [@Solt2020]: generate many duplicate versions of the analysis dataset, assign to each a different random draw from the posterior distributions, perform the analyses repeatedly on each of these multiple versions of the dataset, and combine the results following the rules set out in @Rubin1987.
+Instead, researchers should follow the recommendations of work using other latent variables [e.g., @Schnakenberg2014; @Crabtree2015] and other measures incorporating uncertainty, such as the Standardized World Income Inequality Database [@Solt2020]: generate many duplicate versions of the analysis dataset, assign to each a different random draw from the posterior distributions of the variables measured with uncertainty, perform the analyses repeatedly on each of these multiple versions of the dataset, and combine the results following the rules set out in @Rubin1987.
 The functional programming tools in the `purrr` package [@Henry2019] make this a matter of just a few additional lines of code.
 Although it is intuitive that neglecting measurement error can lead to false positive results, the example presented by @Crabtree2015 demonstrates that doing so can lead to false negative results as well.
-Quantifying the uncertainty in the measures is one of the strengths of this sort of latent variable estimation; researchers should be sure to take advantage of it.
+Quantifying the uncertainty in the measures is one of the strengths of this sort of latent variable estimation, and researchers should be sure to take advantage of it.
 
 \vspace{30pt}
 \noindent \textbf{[Could probably use an application here, especially one that shows off the value of having $\sigma_{k,t}$ as a measure of polarization in public opinion.]}
