@@ -225,7 +225,7 @@ For $\bar{\theta'}_{kt}$, this random-walk prior takes the following form:
 By treating these parameters' values at time $t-1$ as their expected values at time $t$, this prior works to smooth estimates of the mean of the latent trait in the population of each country over time.
 For $\sigma_{kt}$, a lognormally distributed prior is used:
 \begin{equation}
-\sigma_{kt} \sim \textrm{LN}(log(\sigma_{k,t-1}), \sigma_{\sigma}^2) \label{eq:prior_sigma}
+\sigma_{kt} \sim \textrm{LN}(\textrm{log}(\sigma_{k,t-1}), \sigma_{\sigma}^2) \label{eq:prior_sigma}
 \end{equation}
 The lognormal distribution ensures that the prior for $\sigma_{kt}$ takes on only positive values.
 In both cases, if no survey data is available for a particular time, these dynamic models provide estimates based on the estimates for previous and subsequent periods.
