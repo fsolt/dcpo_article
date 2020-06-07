@@ -33,8 +33,6 @@ header-includes:
       - \usepackage{tabularx}
       - \usepackage{threeparttable}
       - \usepackage{wrapfig}
-nocite: |
-  @Solt2020a
 ---
 
 ```{r, include=FALSE}
@@ -67,11 +65,6 @@ In recent years, there have even been applications of Stimson's dyad-ratios meth
 @Carlin2018, for example, generate time series of presidential approval in eighteen Latin American countries, and @Guinaudeau2019 generate annual measures of attitudes toward European integration in the countries of the European Union.
 A shortcoming of this approach, however, is that because each country's series is estimated separately, the results are not assured to be comparable across countries.
 
-<!-- field of comparative public opinion -->
-<!-- lack of dynamics (in contrast to public opinion work in U.S.) -->
-<!-- Check out -->
-<!-- 	Thomassen2011 -->
-
 <!-- question of feedback: positive or negative? ("policies create constituencies" vs. thermostatic) under what conditions? See also Busemeyer2020-->
 
 Latent variable models estimated with Bayesian methods provide a means of overcoming this problem, and they have become a very useful tool for combining the information available in disparate sources into cross-nationally comparable time series. 
@@ -79,8 +72,8 @@ Such models have been used to measure many difficult concepts in comparative pol
 Two recent works, @Claassen2019 and @Caughey2019, have introduced a Bayesian latent variable approach to the study of comparative public opinion that maximizes the information gleaned from available surveys to overcome issues of sparse and incomparable data and allow comparativists to examine the dynamics of public opinion.
 
 This paper presents DCPO, a new model and software for estimating Bayesian latent variables of comparative dynamic public opinion from cross-national survey data.
-The DCPO model yields superior fit and more quantities of theoretical interest than the models offered in previous works allow.
-The `DCPO` package for R not only estimates this model, but also facilitates the formidable data management tasks involved: collecting and managing the survey datasets, identifying the country-years in which respondents were contacted in each, and preparing the response data for the model.
+The DCPO model yields superior fit and more quantities of theoretical interest than the models offered in previous works allow; the `DCPO` package for R estimates this model.
+The accompanying `DCPOtools` facilitates the formidable data management tasks involved: collecting and managing the survey datasets, identifying the country-years in which respondents were contacted in each, and preparing the response data for the model.
 
 The paper begins with a detailed description of the DCPO model, building up from the individual level.
 It continues with a comparison of the performance of the DCPO model to the alternate models of public opinion presented in @Claassen2019 and @Caughey2019.
@@ -260,7 +253,8 @@ The first difficulty parameters for each question, $\beta_{q1}$, are drawn from 
 The item-bias parameters $\delta_{kq}$ receive normally-distributed hierarchical priors with mean 0 and standard deviations drawn from standard half-normal prior distributions.
 The initial value of the mean unbounded latent trait for each country, $\bar{\theta'}_{k1}$, is assigned a standard normal prior, as are the transition variances $\sigma_{\bar{\theta'}}^2$ and $\sigma_{\sigma}^2$; the initial value of the standard deviation of the unbounded latent trait for each country, $\sigma_{k1}$, is drawn from a standard lognormal prior distribution.
 The overall dispersion, $\phi$, receives a somewhat more informative prior drawn from a gamma(4, 0.1) distribution that yields values that are well scaled for that parameter.
-The model is estimated using the `DCPO` package for R [@Solt2020a], which is written in the Stan probabilistic programming language [@StanDevTeam2019a; @StanDevTeam2019b].
+The model is estimated using the `DCPO` package for R, which is written in the Stan probabilistic programming language [@StanDevTeam2019a; @StanDevTeam2019b].
+<!-- The model is estimated using the `DCPO` package for R [@Solt2020a], which is written in the Stan probabilistic programming language [@StanDevTeam2019a; @StanDevTeam2019b]. -->
 
 
 ```{r comparison_table}
@@ -336,17 +330,16 @@ Further, in the external validation test, the DCPO credible intervals come close
 # Preparing and Using DCPO Estimates of Public Opinion
 
 The old saw of data science---that at least 80\% of any project consists of wrangling the data [see, e.g., @Lohr2014]---applies with full force when conducting research on public opinion across countries and over time.
-Fortunately, in addition to estimating the DCPO model, the `DCPO` package facilitates the formidable data management tasks involved: collecting and managing the survey datasets, identifying the country-years in which respondents were contacted in each, and preparing the response data for the model.^[
-NB: At the moment, these functions are split out into [the `DCPOtools` package](https://github.com/fsolt/DCPOtools), but once `DCPOtools` is published to CRAN, `DCPO` will import it and incorporate its features.
-This will be done before the paper goes out.]
+Fortunately, the `DCPOtools` package facilitates the formidable data management tasks involved: collecting and managing the survey datasets, identifying the country-years in which respondents were contacted in each, and preparing the response data for the model.
 
 To generate estimates using `DCPO`, one must first identify a list of questions that tap the desired aspect of public opinion, the order of their respective response categories, and the surveys in which they were asked.
-This is an irreducibly labor-intensive task.^[
-Triggering with a single click a series identical keyword searches across the major data archives should be possible, and would potentially speed this process at least a little, but I have not as yet pushed in this direction.]
+This is an irreducibly labor-intensive task.
+<!-- ^[ -->
+<!-- Triggering with a single click a series identical keyword searches across the major data archives should be possible, and would potentially speed this process at least a little, but I have not as yet pushed in this direction.] -->
 But subsequent data managment chores are largely automated.
 
-`DCPO` contains information on the country-years in which respondents were surveyed for over 600 survey datasets---users can easily add more---and it takes advantage of the work of @Arel-Bundock2018 to standardize the names of countries across datasets.
-To ensure easy collaboration and replicability, the package automates, with a single command, the task of downloading needed survey datasets from the GESIS Data Catalogue [@Persson2015], the ICPSR Data Archive [@Solt2016b], the Pew Research Center [@Solt2016a], the Roper Center for Public Opinion Research [@Solt2017], the Dataverse Network [@Leeper2017], the European Social Survey [@Cimentada2019], and many other sources.
+`DCPOtools` contains information on the country-years in which respondents were surveyed for over 600 survey datasets---users can easily add more---and it takes advantage of the work of @Arel-Bundock2018 to standardize the names of countries across datasets.
+To facilitate collaboration and replicability, the package automates, with a single command, the task of downloading needed survey datasets from the ICPSR Data Archive [@Solt2016b], the Pew Research Center [@Solt2016a], the Roper Center for Public Opinion Research [@Solt2017], the GESIS Data Archive [@Solt2020b], the Dataverse Network [@Leeper2017], the European Social Survey [@Cimentada2019], and many other sources.
 To be sure, there are many surveys for which downloads cannot be automated---for example the Asian Barometer, which is available only via email---but this step nevertheless greatly speeds the work of dataset acquisition.
 An additional line of code generates the raw dataset: the weighted number of respondents in each country-year who provided each response to each question in each survey in the researcher's list.
 One last function reformats the data as input to estimate the DCPO model.
