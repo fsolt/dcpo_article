@@ -63,9 +63,7 @@ These factors have led to research applying the dyad-ratios algorithm elaborated
 
 In recent years, there have even been applications of Stimson's dyad-ratios method to each of many countries.
 @Carlin2018, for example, generate time series of presidential approval in eighteen Latin American countries, and @Guinaudeau2019 generate annual measures of attitudes toward European integration in the countries of the European Union.
-A shortcoming of this approach, however, is that because each country's series is estimated separately, the results are not assured to be comparable across countries.
-
-<!-- question of feedback: positive or negative? ("policies create constituencies" vs. thermostatic) under what conditions? See also Busemeyer2020-->
+A shortcoming of this approach, however, is that because each country's series is estimated separately, the results are not assured to be fully comparable across countries.
 
 Latent variable models estimated with Bayesian methods provide a means of overcoming this problem, and they have become a very useful tool for combining the information available in disparate sources into cross-nationally comparable time series. 
 Such models have been used to measure many difficult concepts in comparative politics, from democracy [@Treier2008; @Pemstein2010] through governance [@Arel-Bundock2011] and state capacity [@Hanson2019] to judicial independence [@Linzer2015] and respect for human rights [@Fariss2014].
@@ -73,7 +71,7 @@ Two recent works, @Claassen2019 and @Caughey2019, have introduced a Bayesian lat
 
 This paper presents DCPO, a new model and software for estimating Bayesian latent variables of comparative dynamic public opinion from cross-national survey data.
 The DCPO model yields superior fit and more quantities of theoretical interest than the models offered in previous works allow; the `DCPO` package for R estimates this model.
-The accompanying `DCPOtools` facilitates the formidable data management tasks involved: collecting and managing the survey datasets, identifying the country-years in which respondents were contacted in each, and preparing the response data for the model.
+The accompanying package `DCPOtools` facilitates the formidable data management tasks involved: collecting and managing the survey datasets, identifying the country-years in which respondents were contacted in each, and preparing the response data for the model.
 
 The paper begins with a detailed description of the DCPO model, building up from the individual level.
 It continues with a comparison of the performance of the DCPO model to the alternate models of public opinion presented in @Claassen2019 and @Caughey2019.
@@ -108,7 +106,7 @@ tibble(theta = rep(seq(-3, 3, length.out = 100), 6),
     ggplot(aes(theta, pr_y, group = line_no)) +
     geom_line() +
     facet_wrap( ~ plot_facet) +
-    xlab(TeX("Individual Latent Trait")) +
+    xlab(TeX("Individual Unbounded Latent Trait $\\theta'_{i}$")) +
     ylab(TeX("Pr(y_{iq} = 1)")) +
     theme_bw() +
     theme(strip.background = element_rect(colour="white", fill="white"),
@@ -294,7 +292,7 @@ DCPO generates estimates of public opinion that are comparable not only over tim
 The next section provides a demonstration of how these features allow DCPO to provide a better fit to actual data.
 
 
-# Relative Fit
+# Assessing Relative Fit
 To assess the ability of the DCPO model to fit public opinion data relative to the two alternative approaches, I use the set of survey questions on support for democracy employed in @Claassen2019 [, 7-8].
 
 The first three columns of Table \ref{tab:validation_table} present the results of an internal validation test, that is, a test that uses the same data that was used to fit the model [see, e.g., @Claassen2019, 9].
@@ -304,7 +302,7 @@ Therefore, the MAE of the country means---the average proportions answering affi
 The percentage reduction in MAE achieved by each model, listed in column 3, represents the improvement in fit compared to this baseline.
 
 The last three columns of Table \ref{tab:validation_table} present the results of an external validation test, a test of the models' ability to predict out-of-sample survey responses.
-This test employs $k$-fold validation with 10 folds, that is, it randomly divides the available country-year-questions into tenths and then sequentially treats each tenth as a test set to be predicted while fitting the model on a training set consisting of the other nine tenths of the data.
+This test employs $k$-fold validation with 10 folds, that is, it randomly divides the available country-year-questions into tenths and then sequentially treats each tenth as a test set to be predicted while fitting the model on a training set consisting of the other nine-tenths of the data.
 Column 4 shows the mean of the MAEs of the ten resulting sets of out-of-sample predictions, while column 5 presents the mean improvement over of these ten MAEs over their respective ten country-mean MAEs.
 Column 6 reports the discrepancy between the percentage of all response proportions that fall within their corresponding predictions' 80% confidence intervals and the expected 80%; it therefore provides a gauge of the accuracy of the models' estimates of uncertainty.
 A negative value in this column indicate that less than 80% of the observed out-of-sample survey proportions are included with the model's predictions' nominal 80% credible intervals, and so its uncertainty estimates are overconfident, while a positive value indicates the opposite, that more than 80% of the observed proportions fall within the credible intervals and so the model's uncertainty estimates are overly conservative.
@@ -339,10 +337,10 @@ This is an irreducibly labor-intensive task.
 But subsequent data managment chores are largely automated.
 
 `DCPOtools` contains information on the country-years in which respondents were surveyed for over 600 survey datasets---users can easily add more---and it takes advantage of the work of @Arel-Bundock2018 to standardize the names of countries across datasets.
-To facilitate collaboration and replicability, the package automates, with a single command, the task of downloading needed survey datasets from the ICPSR Data Archive [@Solt2016b], the Pew Research Center [@Solt2016a], the Roper Center for Public Opinion Research [@Solt2017], the GESIS Data Archive [@Solt2020b], the Dataverse Network [@Leeper2017], the European Social Survey [@Cimentada2019], and many other sources.
+To facilitate collaboration and replicability, the package automates, with a single command, the task of downloading needed survey datasets from the ICPSR Data Archive [@Solt2016b], the Pew Research Center [@Solt2016a], the Dataverse Network [@Leeper2017], the Roper Center for Public Opinion Research [@Solt2017], the European Social Survey [@Cimentada2019], the GESIS Data Archive [@Solt2020b], and many other sources.
 To be sure, there are many surveys for which downloads cannot be automated---for example the Asian Barometer, which is available only via email---but this step nevertheless greatly speeds the work of dataset acquisition.
 An additional line of code generates the raw dataset: the weighted number of respondents in each country-year who provided each response to each question in each survey in the researcher's list.
-One last function reformats the data as input to estimate the DCPO model.
+One last function reformats the data as input to estimate the DCPO model with the `DCPO` package.
 
 After estimating the DCPO model, researchers should be aware that while such latent variable models seek to make the most of the data available, they cannot completely eradicate the issues of data scarcity and incomparability.
 Rather, where and when data are more sparse, the credible intervals of the model estimates will---and should---expand to reflect our greater uncertainty as to the state of public opinion.
@@ -354,9 +352,6 @@ Instead, researchers should follow the recommendations of work using other laten
 The functional programming tools in the `purrr` package [@Henry2019] make this a matter of just a few additional lines of code.
 Although it is intuitive that neglecting measurement error can lead to false positive results, the example presented by @Crabtree2015 demonstrates that doing so can lead to false negative results as well.
 Quantifying the uncertainty in the measures is one of the strengths of this sort of latent variable estimation, and researchers should be sure to take advantage of it.
-
-\vspace{30pt}
-\noindent \textbf{[Could probably use an application here, especially one that shows off the value of having $\sigma_{k,t}$ as a measure of polarization in public opinion.]}
 
 # Conclusions
 
