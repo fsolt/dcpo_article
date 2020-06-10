@@ -251,7 +251,7 @@ The first difficulty parameters for each question, $\beta_{q1}$, are drawn from 
 The item-bias parameters $\delta_{kq}$ receive normally-distributed hierarchical priors with mean 0 and standard deviations drawn from standard half-normal prior distributions.
 The initial value of the mean unbounded latent trait for each country, $\bar{\theta'}_{k1}$, is assigned a standard normal prior, as are the transition variances $\sigma_{\bar{\theta'}}^2$ and $\sigma_{\sigma}^2$; the initial value of the standard deviation of the unbounded latent trait for each country, $\sigma_{k1}$, is drawn from a standard lognormal prior distribution.
 The overall dispersion, $\phi$, receives a somewhat more informative prior drawn from a gamma(4, 0.1) distribution that yields values that are well scaled for that parameter.
-The model is estimated using the `DCPO` package for R, which is written in the Stan probabilistic programming language [@StanDevTeam2019a; @StanDevTeam2019b].
+The model is estimated using the `DCPO` package for R [@Solt2020a], which is written in the Stan probabilistic programming language [@StanDevTeam2019a; @StanDevTeam2019b].
 
 
 ```{r comparison_table}
