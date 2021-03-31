@@ -256,7 +256,7 @@ The model is estimated using the `DCPO` package for R [@Solt2020a], which is wri
 
 ```{r comparison_table}
 comparison_data <- tibble::tribble(
-    ~` `, ~`McGann (2014)`, ~`\\vtop{\\hbox{\\strut Claassen (2019)}\\hbox{\\strut \\quad \\, Model 5}}`, ~`\\vtop{\\hbox{\\strut Caughey, O'Grady,}\\hbox{\\strut and Warshaw (2019)}}`, ~DCPO,
+    ~` `, ~`McGann (2014)`, ~`\\vtop{\\hbox{\\strut Claassen (2019)}\\hbox{\\strut \\quad \\, Model 5}}`, ~`\\vtop{\\hbox{\\strut Caughey, O'Grady,}\\hbox{\\strut and Warshaw (2019)}}`, ~`\\vtop{\\hbox{\\strut DCPO}\\hbox{\\strut \\quad}}`,
     "\\vtop{\\hbox{\\strut Cross-National}\\hbox{\\strut }}", "No", "Yes", "Yes", "Yes",
     "\\vtop{\\hbox{\\strut Dynamic Priors}\\hbox{\\strut }}", "No", "Yes", "Yes", "Yes",
     "\\vtop{\\hbox{\\strut Ordinal}\\hbox{\\strut }}", "No", "No", "Yes", "Yes",
@@ -267,8 +267,7 @@ comparison_data <- tibble::tribble(
 
 comparison_ht <- comparison_data %>%
   as_hux() %>% 
-  add_colnames() %>% 
-  set_width(.8) %>%
+  set_width(1.05) %>%
   set_bold(1, 1:5, TRUE) %>% 
   set_bold(everywhere, final(1), TRUE) %>% 
   set_top_border(1, everywhere, 1) %>%
@@ -278,7 +277,7 @@ comparison_ht <- comparison_data %>%
   set_position("left") %>% 
   set_escape_contents(everywhere, everywhere, FALSE) %>% 
   set_background_color(evens, everywhere, "grey95") %>% 
-  set_align(-1, -1, "center") %>% 
+  set_align(everywhere, -1, "center") %>% 
   set_label("tab:comparison_table")
 
 comparison_ht
